@@ -7,7 +7,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
-    SECRET_KEY = b'E\xf2v\xe4Qd;\x15\x8ba\x92\xe2\x05Q\x05d'
+    SECRET_KEY = 
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"  # os.environ['DATABASE_URL']
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
