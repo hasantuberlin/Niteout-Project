@@ -16,3 +16,4 @@ build/
 
 postgres-data/
 .idea/
+.vscode/
