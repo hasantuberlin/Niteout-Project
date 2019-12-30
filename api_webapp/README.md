@@ -10,3 +10,5 @@
 | Endpoint | Explanation | Parameters | Output |
 |----------|-------------|------------|--------|
 | `/api/transport/journey` | Returns a json with information about transports in several parts, indicated by the mode of transportation | None | Json |
+| `/api/transport/stops/nearby?id=` | Returns a json with all nearby stopage information | id of the stops| Json |
+| `/api/transport/stops?latitude=&longitude=` | Returns a json with all nearby stopage information | latitude,longitude | Json |
