@@ -1,6 +1,6 @@
 import geocoder
 import requests
-from flask import Blueprint
+from flask import Blueprint, request
 from flask import jsonify
 
 bp_transport_api = Blueprint('transport', __name__, url_prefix='/api/transport')
@@ -30,6 +30,33 @@ def stops_near_by(address):
     headers = {"Content-type": "application/json"}
     url = "https://2.bvg.transport.rest/stops/nearby?latitude={}&longitude={}".format(result.latlng[0],
                                                                                       result.latlng[1])
+    response = requests.get(url=url, headers=headers)
+    if response.status_code == 200:
+        rjson = response.json()
+        return jsonify(rjson)
+    else:
+        return 'An error has occurred. Refresh it'
+#Get the nearby stops using station id
+#Example: http://127.0.0.1:5000/api/transport/stops/nearby?id=900000013102
+@bp_transport_api.route('/stops/nearby')
+def stops_by_id():
+    id=request.args.get('id')
+    headers = {"Content-type": "application/json"}
+    url="https://2.bvg.transport.rest/stops/{}".format(id)
+    response = requests.get(url=url, headers=headers)
+    if response.status_code == 200:
+        rjson = response.json()
+        return jsonify(rjson)
+    else:
+        return 'An error has occurred. Refresh it'
+#Get the nearby stops using latitude nad longitude
+# Example: http://127.0.0.1:5000/api/transport/stops?latitude=52.52725&longitude=13.4123
+@bp_transport_api.route('/stops')
+def stops_by_lat_lon():
+    latitude=request.args.get('latitude')
+    longitude=request.args.get('longitude')
+    headers = {"Content-type": "application/json"}
+    url="https://2.bvg.transport.rest/stops/nearby?latitude={}&longitude={}".format(latitude,longitude)
     response = requests.get(url=url, headers=headers)
     if response.status_code == 200:
         rjson = response.json()
