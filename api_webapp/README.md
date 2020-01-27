@@ -14,7 +14,7 @@
 | `/api/transport/stops?latitude=&longitude=` | Returns a json with all nearby stopage information | latitude,longitude | Json |
 
 ## Cinema API
-### `GET /api/cinema/cinemas`
+### `GET /api/cinemas`
 - `location` (string) **Required** <br>
 Retrieve cinemas in a particular area by passing a geo loaction as center in the format latitude,longitude. <br>
 **Example**:  52.5154692,13.3242373
@@ -40,9 +40,9 @@ Filter the cinemas to those having showtimes for a selected movie. <br>
 Hint: Should be use in combination with `time_from` and `time_to`.
 
 #### Example
-`http://127.0.0.1:5000/api/cinema/cinemas?location=52.5154692,13.3242373&distance=5`
+`http://127.0.0.1:5000/api/cinemas/?location=52.5154692,13.3242373&distance=5`
 
-### `GET /api/cinema/movies`
+### `GET /api/cinemas/movies`
 - `location` (string) **Required** <br>
 Retrieve cinemas in a particular area by passing a geo loaction as center in the format latitude,longitude. <br>
 **Example**:  52.5154692,13.3242373
@@ -76,9 +76,9 @@ Filters movies to being in any of the specified genres. <br>
 **Example**:  1,2,3
 
 #### Example
-`http://127.0.0.1:5000/api/cinema/movies?location=52.5154692,13.3242373&distance=5`
+`http://127.0.0.1:5000/api/cinemas/movies?location=52.5154692,13.3242373&distance=5`
 
-### `GET /api/cinema/showtimes`
+### `GET /api/cinemas/showtimes`
 - `location` (string) **Required** <br>
 Retrieve cinemas in a particular area by passing a geo loaction as center in the format latitude,longitude. <br>
 **Example**:  52.5154692,13.3242373
@@ -111,7 +111,7 @@ Retrieve showtimes for a particular cinema. <br>
 **Example**:  1
 
 #### Example
-`http://127.0.0.1:5000/api/cinema/showtimes?location=52.5154692,13.3242373&distance=3&movie_id=27149`
+`http://127.0.0.1:5000/api/cinemas/showtimes?location=52.5154692,13.3242373&distance=3&movie_id=27149`
 
 ## Restaurant API
 ### `GET /api/cinema/cinemas`

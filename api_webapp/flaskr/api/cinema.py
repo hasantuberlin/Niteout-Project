@@ -1,20 +1,18 @@
-import geocoder
 import requests
 from flask import Blueprint, request
-from flask import jsonify
 
-bp_cinema_api = Blueprint('cinema', __name__, url_prefix='/api/cinema')
+bp_cinema_api = Blueprint('cinema', __name__, url_prefix='/api/cinemas')
 cinema_api_key = "EDX4mJjrvtFwWe0ZvrZ9NPwRITLTdjuA"
 
 
-@bp_cinema_api.route('/cinemas')
+@bp_cinema_api.route('/')
 def cinemas():
     params = request.args
 
-    location = params.get('location') # "52.5154692,13.3242373"
+    location = params.get('location')
     distance = params.get('distance')
-    time_from = params.get('time_from') #2020-01-27T17:15:00+01:00
-    time_to = params.get('time_to') #2020-01-27T17:15:00+01:00
+    time_from = params.get('time_from')
+    time_to = params.get('time_to')
     movie_id = params.get('movie_id')
 
     url = "https://api.internationalshowtimes.com/v4/cinemas/?apikey={}".format(cinema_api_key)
@@ -79,7 +77,7 @@ def movies():
 def showtimes():
     params = request.args
 
-    location = params.get('location') # "52.5154692,13.3242373"
+    location = params.get('location')
     distance = params.get('distance')
     time_from = params.get('time_from')
     time_to = params.get('time_to')
