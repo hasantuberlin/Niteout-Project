@@ -10,10 +10,10 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     env = os.environ.get("ENV")
 
-    if env is 'production':
+    if env == 'production':
         # load the instance config, if it exists, when not testing
         app.config.from_object(DevelopmentConfig())
-    elif env is 'development':
+    elif env == 'development':
         # load the instance config, if it exists, when not testing
         app.config.from_object(DevelopmentConfig())
     else:
@@ -45,7 +45,10 @@ def create_app(test_config=None):
 
     # Import blueprint of transportation API
     from .api import bp_transport_api
+    from .api import bp_cinema_api
+
     # Register blueprint of transportation API
     app.register_blueprint(bp_transport_api)
+    app.register_blueprint(bp_cinema_api)
 
     return app
