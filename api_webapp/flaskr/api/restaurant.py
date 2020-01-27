@@ -12,6 +12,8 @@ def restaurants():
     location = params.get('location') # "52.5154692,13.3242373"
     radius = params.get('radius')
     cuisine = params.get('cuisine')
+    minprice = params.get('minprice')
+    maxprice = params.get('maxprice')
 
     url = "https://maps.googleapis.com/maps/api/place/textsearch/json?key={}&type=restaurant".format(restaurant_api_key)
     if location:
@@ -20,6 +22,10 @@ def restaurants():
         url = url + "&radius={}".format(radius)
     if cuisine:
         url = url + "&query={}+restaurant".format(cuisine)
+    if minprice:
+        url = url + "&minprice={}".format(minprice)
+    if maxprice:
+        url = url + "&maxprice={}".format(maxprice)
 
     headers = {"Content-type": "application/json"}
     response = requests.get(url=url, headers=headers)

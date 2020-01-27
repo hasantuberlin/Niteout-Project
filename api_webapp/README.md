@@ -112,3 +112,25 @@ Retrieve showtimes for a particular cinema. <br>
 
 #### Example
 `http://127.0.0.1:5000/api/cinema/showtimes?location=52.5154692,13.3242373&distance=3&movie_id=27149`
+
+## Restaurant API
+### `GET /api/cinema/cinemas`
+- `location` (string) **Required** <br>
+The latitude/longitude around which to retrieve place information. <br>
+**Hint** : If you specify a `location` parameter, you must also specify a `radius` parameter. <br>
+**Example**:  52.5154692,13.3242373
+
+- `radius` (number - maximum: 50000) <br>
+Defines the distance (in meters) within which to bias place results. <br>
+**Example**:  1000
+
+- `cuisine` (string) <br>
+Filter restaurants by cuisine type. <br>
+**Example**: asian
+
+- `minprice` and `maxprice` (number - minimum: 0 - maximum: 4) <br>
+Restricts results to only those places within the specified price level. Valid values are in the range from 0 (most affordable) to 4 (most expensive), inclusive. <br>
+**Example**: 2
+
+#### Example
+`http://127.0.0.1:5000/api/restaurants/?location=52.5154692,13.3242373&radisu=1000&cusine=asian&maxprice=2`
