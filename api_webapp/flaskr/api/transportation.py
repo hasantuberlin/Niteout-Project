@@ -1,5 +1,6 @@
 import geocoder
 import requests
+import time
 from flask import Blueprint, request
 from flask import jsonify
 
@@ -9,9 +10,61 @@ bp_transport_api = Blueprint('transport', __name__, url_prefix='/api/transport')
 # Get journey details by putting longitude and latitude of source and destination, It will return all possible way
 # with bus, train schedulr Example: http://127.0.0.1:5000/journey (Note: By deafult I insert latitude and longitude
 # manually in the function, Later may be it will take from user)
-@bp_transport_api.route('/journey')
-def journey():
-    url = "https://2.bvg.transport.rest/journeys?from.latitude=52.563630&from.longitude=13.331574&from.address=Gotthardstrasse 96&to.latitude=52.514197&to.longitude=13.326087&to.address=TU%20Berlin&when=1575972000&language=de"
+@bp_transport_api.route('/journeys')
+def journeys():
+    params = request.args
+
+    # Required
+    from_latitude = params.get('from.location').split(',')[0]
+    from_longitude = params.get('from.location').split(',')[1]
+    from_address = params.get('from.address')
+
+    to_latitude = params.get('to.location').split(',')[0]
+    to_longitude = params.get('to.location').split(',')[1]
+    to_address = params.get('to.address')
+
+    if not from_latitude or not from_longitude or not from_address:
+        error = "Invalid from.type: location"
+        return error
+
+    if not to_latitude or not to_longitude or not to_address:
+        error = "Invalid to.type: location"
+        return error
+
+    url = "https://2.bvg.transport.rest/journeys?from.latitude={}&from.longitude={}&from.address={}&to.latitude={}&to.longitude={}&to.address={}".format(from_latitude, from_longitude, from_address,
+                                                                                                                                                         to_latitude, to_longitude, to_address)
+
+    # Optional
+    departure = params.get('departure')
+    arrival = params.get('arrival')
+    suburban = params.get('suburban')
+    subway = params.get('subway')
+    tram = params.get('tram')
+    bus = params.get('bus')
+    express = params.get('express')
+    regional = params.get('regional')
+
+    if departure:
+        tuple_time = time.strptime(departure[:19], "%Y-%m-%dT%H:%M:%S")
+        unix_time = str(time.mktime(tuple_time)).split('.')[0]
+        url = url + "&departure={}".format(unix_time)
+    if arrival:
+        tuple_time = time.strptime(arrival[:19], "%Y-%m-%dT%H:%M:%S")
+        unix_time = str(time.mktime(tuple_time)).split('.')[0]
+        url = url + "&arrival={}".format(unix_time)
+    if suburban:
+        url = url + "&suburban={}".format(suburban)
+    if subway:
+        url = url + "&subway={}".format(subway)
+    if tram:
+        url = url + "&tram={}".format(tram)
+    if bus:
+        url = url + "&bus={}".format(bus)
+    if express:
+        url = url + "&express={}".format(express)
+    if regional:
+        url = url + "&regional={}".format(regional)
+
     headers = {"Content-type": "application/json"}
     response = requests.get(url=url, headers=headers)
     if response.status_code == 200:

@@ -13,6 +13,61 @@
 | `/api/transport/stops/nearby?id=` | Returns a json with all nearby stopage information | id of the stops| Json |
 | `/api/transport/stops?latitude=&longitude=` | Returns a json with all nearby stopage information | latitude,longitude | Json |
 
+## Transportation API
+### `GET /api/transport/journeys`
+- `from.location` (string) **Required** <br>
+The latitude/longitude around which to retrieve departure place information. <br>
+**Example**:  52.5154692,13.3242373
+
+- `from.address` (string) **Required** <br>
+The address around which to retrieve departure place information. <br>
+**Example**:  Einsteinufer 17
+
+- `to.location` (string) **Required** <br>
+The latitude/longitude around which to retrieve arrival place information. <br>
+**Example**: 52.5081878,13.3730181
+
+- `to.address` (string) **Required** <br>
+The address around which to retrieve arrival place information. <br>
+**Example**: Potsdamer Straße 5
+
+- `departure` (string) <br>
+Departure time <br>
+**Time format**: Any parsable date-time string should work, however ISO8601 as in RFC3339 is recommended. <br>
+**Example**:  2020-01-27T17:15:00+01:00
+
+- `arrival` (string) <br>
+Arrival time <br>
+**Time format**: Any parsable date-time string should work, however ISO8601 as in RFC3339 is recommended. <br>
+**Example**:  2020-01-27T17:15:00+01:00
+
+- `suburban` (string - default: true) <br>
+Include S-Bahn trains? <br>
+**Example**: true
+
+- `subway` (string - default: true) <br>
+Include U-Bahn trains? <br>
+**Example**: true
+
+- `tram` (string - default: true) <br>
+Include trams? <br>
+**Example**: false
+
+- `bus` (string - default: true) <br>
+Include buses? <br>
+**Example**: false
+
+- `express` (string - default: true) <br>
+Include IC/ICE/EC trains? <br>
+**Example**: false
+
+- `regional` (string - default: true) <br>
+Include RE/RB/ODEG trains? <br>
+**Example**: true
+
+#### Example
+`http://127.0.0.1:5000/api/transport/journeys?from.location=52.5154692,13.3242373&from.address=Einsteinufer%2017&to.location=52.5081878,13.3730181&to.address=Potsdamer%20Stra%C3%9Fe%205&departure=2020-01-27T17:15:00&subway=false`
+
 ## Cinema API
 ### `GET /api/cinemas`
 - `location` (string) **Required** <br>
