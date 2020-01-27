@@ -44,11 +44,11 @@ def create_app(test_config=None):
         db.create_all()
 
     # Import blueprint of transportation API
-    from .api import bp_transport_api
-    from .api import bp_cinema_api
+    from .api import bp_transport_api, bp_cinema_api, bp_restaurant_api
 
     # Register blueprint of transportation API
     app.register_blueprint(bp_transport_api)
     app.register_blueprint(bp_cinema_api)
+    app.register_blueprint(bp_restaurant_api)
 
     return app
