@@ -11,8 +11,6 @@ cinema_api_key = "EDX4mJjrvtFwWe0ZvrZ9NPwRITLTdjuA"
 def cinemas():
     params = request.args
 
-    countries = params.get('countries') # DE = Germany
-    city_ids = params.get('city_ids') # 1 = Berlin
     location = params.get('location') # "52.5154692,13.3242373"
     distance = params.get('distance')
     time_from = params.get('time_from') #2020-01-27T17:15:00+01:00
@@ -20,10 +18,6 @@ def cinemas():
     movie_id = params.get('movie_id')
 
     url = "https://api.internationalshowtimes.com/v4/cinemas/?apikey={}".format(cinema_api_key)
-    if countries:
-        url = url + "&countries={}".format(countries)
-    if city_ids:
-        url = url + "&city_ids={}".format(city_ids)
     if location:
         url = url + "&location={}".format(location)
     if distance:
@@ -48,24 +42,15 @@ def cinemas():
 def movies():
     params = request.args
 
-    countries = params.get('countries') # DE = Germany
-    city_ids = params.get('city_ids') # 1 = Berlin
     location = params.get('location') # "52.5154692,13.3242373"
     distance = params.get('distance')
     time_from = params.get('time_from')
     time_to = params.get('time_to')
     movie_id = params.get('movie_id')
     lang = params.get('lang')
-    cinema_id = params.get('cinema_id')
     genre_ids = params.get('genre_ids')
 
-    fields = "id,title,original_title,runtime,genres,ratings"
-
-    url = "https://api.internationalshowtimes.com/v4/movies/?apikey={}&fields={}".format(cinema_api_key, fields)
-    if countries:
-        url = url + "&countries={}".format(countries)
-    if city_ids:
-        url = url + "&city_ids={}".format(city_ids)
+    url = "https://api.internationalshowtimes.com/v4/movies/?apikey={}&all_fields=true".format(cinema_api_key)
     if location:
         url = url + "&location={}".format(location)
     if distance:
@@ -78,8 +63,6 @@ def movies():
         url = url + "&movie_id={}".format(movie_id)
     if lang:
         url = url + "&lang={}".format(lang)
-    if cinema_id:
-        url = url + "&cinema_id={}".format(cinema_id)
     if genre_ids:
         url = url + "&genre_ids={}".format(genre_ids)
 
@@ -96,8 +79,6 @@ def movies():
 def showtimes():
     params = request.args
 
-    countries = params.get('countries') # DE = Germany
-    city_ids = params.get('city_ids') # 1 = Berlin
     location = params.get('location') # "52.5154692,13.3242373"
     distance = params.get('distance')
     time_from = params.get('time_from')
@@ -106,14 +87,10 @@ def showtimes():
     cinema_id = params.get('cinema_id')
     genre_ids = params.get('genre_ids')
 
-    movie_fields = "id,title,original_title,runtime,genres,ratings"
+    movie_fields = "id,title,original_title,original_language,runtime,genres,ratings"
     append_info = "cinemas,movies"
 
-    url = "https://api.internationalshowtimes.com/v4/showtimes/?apikey={}&append={}&movie_fields={}".format(cinema_api_key, append_info, movie_fields)
-    if countries:
-        url = url + "&countries={}".format(countries)
-    if city_ids:
-        url = url + "&city_ids={}".format(city_ids)
+    url = "https://api.internationalshowtimes.com/v4/showtimes/?apikey={}&append={}&movie_fields={}&all_fields=true".format(cinema_api_key, append_info, movie_fields)
     if location:
         url = url + "&location={}".format(location)
     if distance:
@@ -126,8 +103,6 @@ def showtimes():
         url = url + "&movie_id={}".format(movie_id)
     if cinema_id:
         url = url + "&cinema_id={}".format(cinema_id)
-    if genre_ids:
-        url = url + "&genre_ids={}".format(genre_ids)
 
     headers = {"Content-type": "application/json"}
     response = requests.get(url=url, headers=headers)
