@@ -36,11 +36,12 @@ def cinemas():
         error = "An error has occured: Refresh again. Error code: {}".format(response.status_code)
         return error
 
+
 @bp_cinema_api.route('/movies')
 def movies():
     params = request.args
 
-    location = params.get('location') # "52.5154692,13.3242373"
+    location = params.get('location')  # "52.5154692,13.3242373"
     distance = params.get('distance')
     time_from = params.get('time_from')
     time_to = params.get('time_to')
@@ -73,6 +74,7 @@ def movies():
         error = "An error has occured: Refresh again. Error code: {}".format(response.status_code)
         return error
 
+
 @bp_cinema_api.route('/showtimes')
 def showtimes():
     params = request.args
@@ -88,7 +90,8 @@ def showtimes():
     movie_fields = "id,title,original_title,original_language,runtime,genres,ratings"
     append_info = "cinemas,movies"
 
-    url = "https://api.internationalshowtimes.com/v4/showtimes/?apikey={}&append={}&movie_fields={}&all_fields=true".format(cinema_api_key, append_info, movie_fields)
+    url = "https://api.internationalshowtimes.com/v4/showtimes/?apikey={}&append={}&movie_fields={}&all_fields=true".format(
+        cinema_api_key, append_info, movie_fields)
     if location:
         url = url + "&location={}".format(location)
     if distance:
