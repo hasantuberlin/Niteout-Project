@@ -9,7 +9,7 @@ restaurant_api_key = "AIzaSyA8YmjIPCPcOerJOuO4tzFbQ1eoJ6W6ilw"
 def restaurants():
     params = request.args
 
-    location = params.get('location') # "52.5154692,13.3242373"
+    location = params.get('location')  # "52.5154692,13.3242373"
     radius = params.get('radius')
     cuisine = params.get('cuisine')
     minprice = params.get('minprice')
@@ -33,5 +33,5 @@ def restaurants():
         rjson = response.json()
         return rjson
     else:
-        error = "An error has occured: Refresh again. Error code: {}".format(response.status_code)
+        error = "An error has occurred: Refresh again. Error code: {}".format(response.status_code)
         return error

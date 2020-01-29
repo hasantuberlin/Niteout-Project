@@ -37,12 +37,6 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
-    from .db import db
-    import flaskr.models
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
-
     # Import blueprint of transportation API
     from .api import bp_transport_api, bp_cinema_api, bp_restaurant_api
 
