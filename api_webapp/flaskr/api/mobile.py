@@ -11,7 +11,8 @@ def cinemas():
     if request.is_json:
         json_input = request.get_json()
         print(json_input)
-        most_voted_cuisine = max(json_input["GenrePreferences"].iterkeys(), key=(lambda key: json_input["GenrePreferences"][key]))
+        genre_preferences = json_input["GenrePreferences"]
+        most_voted_cuisine = max(genre_preferences, key=lambda key: genre_preferences[key])
         print(most_voted_cuisine)
         headers = {"Content-type": "application/json"}
         return json_input
