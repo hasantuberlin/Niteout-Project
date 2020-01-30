@@ -40,6 +40,42 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "localhost:5000/api/mobile/restaurants",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"Movie_id\": 1,\n   \"UserLat\": 52.51379,\n   \"UserLon\": 13.40342,\n   \"Date\": \"2020-01-31T17:15:00+01:00\",\n   \"CuisinePreferences\": {\n      \"Asian\": 1,\n      \"German\": 5,\n      \"Turkish\": 7,\n      \"Indian\": 8,\n      \"Mexican\": 1\n   }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/mobile/restaurants",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"mobile",
+						"restaurants"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
