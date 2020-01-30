@@ -14,6 +14,20 @@ def movies():
         genre_preferences = json_input["GenrePreferences"]
         most_voted_genre = max(genre_preferences, key=lambda key: genre_preferences[key])
         print(most_voted_genre)
+        most_voted_genre_id = 0
+
+        lat = json_input["UserLat"]
+        lon = json_input["UserLon"]
+
+        # Step 2.2x
+        movie_request = 'http://localhost:5000/api/cinemas/movies?location={},{}&distance=5&genre_ids={}'.format(lat,
+                                                                                                                 lon,
+                                                                                                                 most_voted_genre_id)
+
+        r = requests.get(movie_request)
+        r_json = r.json()
+        print(r_json)
+
         list_of_genres = _fetch_genres()
         genre_obj = next((item for item in list_of_genres['genres'] if item['name'] == most_voted_genre), None)
         print(genre_obj)
@@ -32,7 +46,6 @@ def restaurants():
         cuisine_preferences = json_input["CuisinePreferences"]
         most_voted_cuisine = max(cuisine_preferences, key=lambda key: cuisine_preferences[key])
         print(most_voted_cuisine)
-        print(g.list_of_genres)
         headers = {"Content-type": "application/json"}
         return json_input
     else:
