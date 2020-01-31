@@ -188,4 +188,4 @@ Restricts results to only those places within the specified price level. Valid v
 **Example**: 2
 
 #### Example
-`http://127.0.0.1:5000/api/restaurants/?location=52.5154692,13.3242373&radius=1000&cusine=asian&maxprice=2`
+`http://127.0.0.1:5000/api/restaurants/?location=52.5154692,13.3242373&radius=1000&cuisine=asian&maxprice=2`
