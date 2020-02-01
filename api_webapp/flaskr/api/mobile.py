@@ -211,7 +211,7 @@ def get_journeys():
                 legsdict={}
                 legsdict['Step']=i
                 k=len(legs)
-                if k<=7:
+                if k<=7: # This indicates the walking
                     if i==leg_len:
                         legsdict['Stop']=legs['origin']['name']
                         legsdict['Destination']=legs['destination']['address']
@@ -225,7 +225,7 @@ def get_journeys():
                     legsdict["DepartureTime"]=legs['departure']
                     legsdict['ArrivalTime']=legs['arrival']
                     legsdict['Mode']="Walking"
-                if k>7:
+                if k>7: # This is indicate the bus train journey
                     legsdict['Stop']=legs['origin']['name']
                     legsdict['Destination']=legs['destination']['name']
                     legsdict['ArrivalTime']=legs['arrival']
