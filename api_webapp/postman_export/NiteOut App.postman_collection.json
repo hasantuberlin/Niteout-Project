@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "e9673848-548e-41d9-b929-f4490f70728b",
+		"name": "NiteOut App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:5000/api/mobile/movies",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"Date\": \"2020-01-31T17:15:00+01:00\",\n   \"GenrePreferences\": {\n      \"Action\": 10,\n      \"Comedy\": 5,\n      \"Romantic\": 7,\n      \"Fiction\": 8,\n      \"Horror\": 1\n   },\n   \"UserLat\": 52.51379,\n   \"UserLon\": 13.40342\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/mobile/movies",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"mobile",
+						"movies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:5000/api/mobile/restaurants",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"Movie_id\": 1,\n   \"UserLat\": 52.51379,\n   \"UserLon\": 13.40342,\n   \"Date\": \"2020-01-31T17:15:00+01:00\",\n   \"CuisinePreferences\": {\n      \"Asian\": 1,\n      \"German\": 5,\n      \"Turkish\": 7,\n      \"Indian\": 8,\n      \"Mexican\": 1\n   }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/mobile/restaurants",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"mobile",
+						"restaurants"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

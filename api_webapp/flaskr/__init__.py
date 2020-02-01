@@ -38,11 +38,12 @@ def create_app(test_config=None):
         return 'Hello, World!'
 
     # Import blueprint of transportation API
-    from .api import bp_transport_api, bp_cinema_api, bp_restaurant_api
+    from .api import bp_transport_api, bp_cinema_api, bp_restaurant_api, bp_mobile_api
 
     # Register blueprint of transportation API
     app.register_blueprint(bp_transport_api)
     app.register_blueprint(bp_cinema_api)
     app.register_blueprint(bp_restaurant_api)
+    app.register_blueprint(bp_mobile_api)
 
     return app
