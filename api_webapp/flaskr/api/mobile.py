@@ -139,8 +139,8 @@ def get_journeys():
         'ToCinema': list(),
         'ToRestaurant': list()
     }
-    CinemaJourneyList=[]
-    RestaurantJourneyList=[]
+   
+    
 
     if request.is_json:
         json_input = request.get_json()
@@ -169,8 +169,10 @@ def get_journeys():
         ToRestaurantResponse = requests.get(restaurant_journey_request)
         TocinemaResponse_json = TocinemaResponse.json()
         ToRestaurantResponse_json = ToRestaurantResponse.json()
-
+        cinema_journey_count=1
+        cinema_journey={}
         for journey in TocinemaResponse_json['journeys']:
+            CinemaJourneyList= []
             leg_len=len(journey['legs'])
             i=1
             for legs in journey['legs']:
@@ -203,8 +205,13 @@ def get_journeys():
                     legsdict['Mode']=legs["line"]["mode"]
                 i=i+1
                 CinemaJourneyList.append(legsdict)
-            break 
+                cinema_journey[cinema_journey_count]=CinemaJourneyList
+            cinema_journey_count=cinema_journey_count+1 
+        restraurant_journey={}
+        restaurant_journey_count=1
+        
         for journey in ToRestaurantResponse_json['journeys']:
+            RestaurantJourneyList=[]
             leg_len=len(journey['legs'])
             i=1
             for legs in journey['legs']:
@@ -225,7 +232,7 @@ def get_journeys():
                     legsdict["DepartureTime"]=legs['departure']
                     legsdict['ArrivalTime']=legs['arrival']
                     legsdict['Mode']="Walking"
-                if k>7: # This is indicate the bus train journey
+                if k>7: # This indicates the (bus train) journey
                     legsdict['Stop']=legs['origin']['name']
                     legsdict['Destination']=legs['destination']['name']
                     legsdict['ArrivalTime']=legs['arrival']
@@ -237,10 +244,11 @@ def get_journeys():
                     legsdict['Mode']=legs["line"]["mode"]
                 i=i+1
                 RestaurantJourneyList.append(legsdict)
-            break       
+                restraurant_journey[restaurant_journey_count]=RestaurantJourneyList
+            restaurant_journey_count=restaurant_journey_count+1        
         TransportDataDict={
-        'ToCinema': CinemaJourneyList,
-        'ToRestaurant': RestaurantJourneyList
+        'ToCinema': cinema_journey,
+        'ToRestaurant': restraurant_journey
         }
         Trasnport_json=json.dumps(TransportDataDict)
         return Trasnport_json
