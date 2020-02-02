@@ -20,12 +20,10 @@ def get_movies():
     # }
     if request.is_json:
         json_input = request.get_json()
-        print(json_input)
         genre_preferences = json_input["GenrePreferences"]
         most_voted_genre = max(genre_preferences, key=lambda key: genre_preferences[key])
         list_of_genres = _fetch_genres()
         genre_obj = next((item for item in list_of_genres['genres'] if item['name'] == most_voted_genre), None)
-        print(genre_obj["id"])
         genre_id = genre_obj["id"]
 
         lat = json_input["UserLat"]
@@ -36,23 +34,29 @@ def get_movies():
 
         r = requests.get(movie_request)
         r_json = r.json()
-        print(r_json)
 
         # TODO: format the output
 
-        results = r_json["results"]
+        results = r_json["movies"]
         movies = []
         formatted_results = {"Movies": []}
         for i, item in enumerate(results):
             json_item = {}
-            json_item["movie_id"] =item.get("id")
-            json_item["title"] =item.get("title")
-            json_item["poster"] =item.get("poster_image_thumbnail")
+            json_item["movie_id"] = item.get("id")
+            json_item["title"] = item.get("title")
+            json_item["poster"] = item.get("poster_image_thumbnail")
+            # workaround on ratings
+            ratings = item.get("ratings")
+            if ratings:
+                json_item["ratings"] = ratings[next(iter(ratings))].get("value")
+            else:
+                json_item["ratings"] = ""
+            json_item["runtime"] = item.get("runtime")
             movies.append(json_item)
 
         formatted_results["Movies"] = movies
         formatted_json = json.dumps(formatted_results)
-        return formatted_json
+        return formatted_results
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
         return error
