@@ -40,8 +40,19 @@ def get_movies():
 
         # TODO: format the output
 
+        results = r_json["results"]
+        movies = []
+        formatted_results = {"Movies": []}
+        for i, item in enumerate(results):
+            json_item = {}
+            json_item["movie_id"] =item.get("id")
+            json_item["title"] =item.get("title")
+            json_item["poster"] =item.get("poster_image_thumbnail")
+            movies.append(json_item)
 
-        return r_json
+        formatted_results["Movies"] = movies
+        formatted_json = json.dumps(formatted_results)
+        return formatted_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
         return error
@@ -68,9 +79,53 @@ def get_cinemas():
         r = requests.get(showtime_request)
         r_json = r.json()
 
-        # TODO: Format the output
+      	# TODO: Format the output
+        showtimes_results = r_json["results"]
+        showtimes = []
+        formatted_results = {"Showtimes": []}
+        for i,item in enumerate(showtimes_results):
+            json_item = {}
+            json_item["showtimes_id"] = item.get("id")
+            json_item["cinema_id"] = item.get("cinema_id")
+            json_item["movie_id"] = item.get("movie_id")
+            json_item["start_time"] = item.get("start_at")
+            json_item["language"] = item.get("de")
+            json_item["is_3d"] = item.get("is_3d")
+            json_item["is_imax"] = item.get("is_imax")
+            json_item["subtitle_language"] = item.get("subtitle_language")
+            json_item["booking_link"] = item.get("booking_link")
 
-        return r_json
+            showtimes.append(json_item)
+
+        showtimes_formatted_results["Showtimes"] = showtimes
+        showtimes_formatted_json = json.dumps(showtimes_formatted_results)
+
+	
+	# TODO: Format the output
+        cinemas_results = r_json["results"]
+        cinemas = []
+        cinemas_formatted_results = {"Cinemas": []}
+        for i,item in enumerate(cinemas_results):
+            json_item = {}
+            json_item["id"] = item.get("id")
+            json_item["name"] = item.get("name")
+            json_item["telephone"] = item.get("telephone")
+            json_item["website"] = item.get("website")
+            json_item["lat"] = item.get("location").get("lat")
+            json_item["lon"] = item.get("location").get("lon")
+            json_item["address"] = item.get("location").get("address").get("display_text")
+            json_item["street"] = item.get("location").get("address").get("street")
+            json_item["house"] = item.get("location").get("address").get("house")
+            json_item["zip_coe"] = item.get("location").get("address").get("zip_code")
+            json_item["city"] = item.get("location").get("address").get("city")
+            json_item["state"] = item.get("location").get("address").get("state")
+            json_item["country"] = item.get("location").get("address").get("country")
+
+            cinemas.append(json_item)
+
+        cinemas_formatted_results["Cinemas"] = cinemas
+        cinemas_formatted_json = json.dumps(cinemas_formatted_results)
+        return cinemas_formatted_json, showtimes_formatted_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
         return error
