@@ -190,24 +190,34 @@ def get_journeys():
 
         time_from = json_input["Date"]
 
-        # TODO: Add parameters if needed
-        cinema_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}'.format(
-            user_lat, user_lon, user_address,
-            cinema_lat, cinema_lon, cinema_address)
-        restaurant_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}'.format(
-            cinema_lat, cinema_lon, cinema_address,
-            restaurant_lat, restaurant_lon, restaurant_address)
+        # Error handling caused by unresponsive BVG API
+        max_retries = 3
+        num_retries = 0
+        while num_retries < max_retries:
+            cinema_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}'.format(user_lat, user_lon, user_address,
+                                                                                                                                                               cinema_lat, cinema_lon, cinema_address)
+            toCinemaResponse = requests.get(cinema_journey_request)
+            if toCinemaResponse.content != b'An error has occured: Refresh again. Error code: 502':
+                break
+            num_retries += 1
 
-        TocinemaResponse = requests.get(cinema_journey_request)
-        ToRestaurantResponse = requests.get(restaurant_journey_request)
-        TocinemaResponse_json = TocinemaResponse.json()
-        ToRestaurantResponse_json = ToRestaurantResponse.json()
-        cinema_journey_count = 1
-        cinema_journey = {}
-        for journey in TocinemaResponse_json['journeys']:
-            CinemaJourneyList = []
-            leg_len = len(journey['legs'])
-            i = 1
+        num_retries = 0
+        while num_retries < max_retries:
+            restaurant_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}'.format(cinema_lat, cinema_lon, cinema_address,
+                                                                                                                                                                        restaurant_lat, restaurant_lon, restaurant_address)
+            toRestaurantResponse = requests.get(restaurant_journey_request)
+            if toRestaurantResponse.content != b'An error has occured: Refresh again. Error code: 502':
+                break
+            num_retries += 1
+
+        toCinemaResponse_json = toCinemaResponse.json()
+        toRestaurantResponse_json = toRestaurantResponse.json()
+        cinema_journey_count=1
+        cinema_journey={}
+        for journey in toCinemaResponse_json['journeys']:
+            CinemaJourneyList= []
+            leg_len=len(journey['legs'])
+            i=1
             for legs in journey['legs']:
                 legsdict = {}
                 legsdict['Step'] = i
@@ -243,7 +253,7 @@ def get_journeys():
         restraurant_journey = {}
         restaurant_journey_count = 1
 
-        for journey in ToRestaurantResponse_json['journeys']:
+        for journey in toRestaurantResponse_json['journeys']:
             RestaurantJourneyList = []
             leg_len = len(journey['legs'])
             i = 1
