@@ -29,18 +29,15 @@ def get_movies():
         lat = json_input["UserLat"]
         lon = json_input["UserLon"]
 
-        # TODO: Add parameters if needed
         movie_request = 'http://localhost:5000/api/cinemas/movies?location={},{}&distance=5&genre_ids={}'.format(lat, lon, genre_id)
 
         r = requests.get(movie_request)
         r_json = r.json()
 
-        # TODO: format the output
-
         results = r_json["movies"]
         movies = []
         formatted_results = {"Movies": []}
-        for i, item in enumerate(results):
+        for item in results:
             json_item = {}
             json_item["movie_id"] = item.get("id")
             json_item["title"] = item.get("title")
@@ -61,8 +58,8 @@ def get_movies():
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
         return error
 
-@bp_mobile_api.route('/cinemas', methods=['POST'])
-def get_cinemas():
+@bp_mobile_api.route('/showtimes', methods=['POST'])
+def get_showtimes():
     # dummy_input = {
     #    "Date": "2020-01-31T17:15:00+01:00",
     #    "MovieId": 27149,
@@ -71,7 +68,6 @@ def get_cinemas():
     # }
     if request.is_json:
         json_input = request.get_json()
-        print(json_input)
 
         lat = json_input["UserLat"]
         lon = json_input["UserLon"]
@@ -79,57 +75,39 @@ def get_cinemas():
         time_from = json_input["Date"]
 
         # TODO: Add parameters if needed
-        showtime_request = 'http://127.0.0.1:5000/api/cinemas/showtimes?location={},{}&distance=5&&movie_id={}&time_from={}'.format(lat, lon, movie_id, time_from)
+        showtime_request = 'http://127.0.0.1:5000/api/cinemas/showtimes?location={},{}&distance=3&movie_id={}&time_from={}'.format(lat, lon, movie_id, time_from)
         r = requests.get(showtime_request)
         r_json = r.json()
 
       	# TODO: Format the output
-        showtimes_results = r_json["results"]
-        showtimes = []
-        formatted_results = {"Showtimes": []}
-        for i,item in enumerate(showtimes_results):
-            json_item = {}
-            json_item["showtimes_id"] = item.get("id")
-            json_item["cinema_id"] = item.get("cinema_id")
-            json_item["movie_id"] = item.get("movie_id")
-            json_item["start_time"] = item.get("start_at")
-            json_item["language"] = item.get("de")
-            json_item["is_3d"] = item.get("is_3d")
-            json_item["is_imax"] = item.get("is_imax")
-            json_item["subtitle_language"] = item.get("subtitle_language")
-            json_item["booking_link"] = item.get("booking_link")
-
-            showtimes.append(json_item)
-
-        showtimes_formatted_results["Showtimes"] = showtimes
-        showtimes_formatted_json = json.dumps(showtimes_formatted_results)
-
-	
-	# TODO: Format the output
-        cinemas_results = r_json["results"]
+        cinemas_results = r_json["cinemas"]
         cinemas = []
-        cinemas_formatted_results = {"Cinemas": []}
-        for i,item in enumerate(cinemas_results):
+        for item in cinemas_results:
             json_item = {}
-            json_item["id"] = item.get("id")
-            json_item["name"] = item.get("name")
-            json_item["telephone"] = item.get("telephone")
-            json_item["website"] = item.get("website")
             json_item["lat"] = item.get("location").get("lat")
             json_item["lon"] = item.get("location").get("lon")
             json_item["address"] = item.get("location").get("address").get("display_text")
-            json_item["street"] = item.get("location").get("address").get("street")
-            json_item["house"] = item.get("location").get("address").get("house")
-            json_item["zip_coe"] = item.get("location").get("address").get("zip_code")
-            json_item["city"] = item.get("location").get("address").get("city")
-            json_item["state"] = item.get("location").get("address").get("state")
-            json_item["country"] = item.get("location").get("address").get("country")
-
+            json_item["id"] = item.get("id")
+            json_item["name"] = item.get("name")
             cinemas.append(json_item)
 
-        cinemas_formatted_results["Cinemas"] = cinemas
-        cinemas_formatted_json = json.dumps(cinemas_formatted_results)
-        return cinemas_formatted_json, showtimes_formatted_json
+        showtimes_results = r_json["showtimes"]
+        showtimes = []
+        for item in showtimes_results:
+            json_item = {}
+            json_item["cinema_id"] = item.get("cinema_id")
+            json_item["cinema_movie_title"] = item.get("cinema_movie_title")
+            json_item["movie_id"] = item.get("movie_id")
+            json_item["is_3d"] = item.get("is_3d")
+            json_item["is_imax"] = item.get("is_imax")
+            json_item["language"] = item.get("language")
+            json_item["start_at"] = item.get("start_at")
+            json_item["subtitle_language"] = item.get("subtitle_language")
+            showtimes.append(json_item)
+
+        formatted_results = {"Cinemas": cinemas, "Showtimes": showtimes}
+        formatted_json = json.dumps(formatted_results)
+        return formatted_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
         return error
@@ -155,7 +133,7 @@ def get_restaurants():
         results = r_json["results"]
         restaurants = []
         formatted_results = {"Restaurants": []}
-        for i,item in enumerate(results):
+        for item in results:
             json_item = {}
             json_item["lat"] = item.get("geometry").get("location").get("lat")
             json_item["lon"] = item.get("geometry").get("location").get("lng")
