@@ -15,13 +15,16 @@ def restaurants():
     minprice = params.get('minprice')
     maxprice = params.get('maxprice')
 
-    url = "https://maps.googleapis.com/maps/api/place/textsearch/json?key={}&type=restaurant".format(restaurant_api_key)
+    # url = "https://maps.googleapis.com/maps/api/place/textsearch/json?key={}&type=restaurant".format(restaurant_api_key)
+    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key={}&type=restaurant".format(
+        restaurant_api_key)
     if location:
         url = url + "&location={}".format(location)
     if radius:
         url = url + "&radius={}".format(radius)
     if cuisine:
-        url = url + "&query={}+restaurant".format(cuisine)
+        # url = url + "&query={}+restaurant".format(cuisine)
+        url = url + "&keyword={}".format(cuisine)
     if minprice:
         url = url + "&minprice={}".format(minprice)
     if maxprice:

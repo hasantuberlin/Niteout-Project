@@ -169,7 +169,7 @@ Retrieve showtimes for a particular cinema. <br>
 `http://127.0.0.1:5000/api/cinemas/showtimes?location=52.5154692,13.3242373&distance=3&movie_id=27149`
 
 ## Restaurant API
-### `GET /api/cinema/cinemas`
+### `GET /api/restaurants`
 - `location` (string) **Required** <br>
 The latitude/longitude around which to retrieve place information. <br>
 **Hint** : If you specify a `location` parameter, you must also specify a `radius` parameter. <br>
@@ -188,4 +188,188 @@ Restricts results to only those places within the specified price level. Valid v
 **Example**: 2
 
 #### Example
-`http://127.0.0.1:5000/api/restaurants/?location=52.5154692,13.3242373&radisu=1000&cusine=asian&maxprice=2`
+`http://127.0.0.1:5000/api/restaurants/?location=52.5154692,13.3242373&radius=1000&cuisine=asian&maxprice=2`
+
+## Mobile API
+### `POST /api/mobile/movies` 
+Return list of movies based on the genre voting.
+##### JSON input example
+```
+{
+   "Date": "2020-01-31T17:15:00+01:00",
+   "GenrePreferences": {
+      "Action": 10,
+      "Comedy": 5,
+      "Romantic": 7,
+      "Fiction": 8,
+      "Horror": 1
+   },
+   "UserLat": 52.51379,
+   "UserLon": 13.40342
+}
+```
+##### JSON output example
+```
+
+{
+    "Movies": [
+        {
+            "movie_id": "55461",
+            "poster": "http://image.tmdb.org/t/p/w154/h4VB6m0RwcicVEZvzftYZyKXs6K.jpg",
+            "ratings": 9.7,
+            "runtime": 109,
+            "title": "Birds of Prey (and the Fantabulous Emancipation of One Harley Quinn)"
+        }, ...
+    ]
+}
+```
+
+### `POST /api/mobile/showtimes`
+Return list of all cinemas and showtimes for the chosen movie.
+##### JSON input example
+```
+{
+   "Date": "2020-01-31T17:15:00+01:00",
+   "MovieId": 27149,
+   "UserLat": 52.51379,
+   "UserLon": 13.40342
+}
+```
+##### JSON output example
+```
+
+{
+    "Cinemas": [
+        {
+            "lat": 52.5092,
+            "lon": 13.3734,
+            "address": "CinemaxX Berlin, Potsdamer Straße 5, 10785 Berlin",
+            "id": "979",
+            "name": "CinemaxX Berlin"
+        }, ...
+    ],
+    "Showtimes": [
+        {
+            "cinema_id": "979",
+            "cinema_movie_title": "Bad Boys For Life",
+            "movie_id": "27149",
+            "is_3d": false,
+            "is_imax": false,
+            "language": "de",
+            "start_at": "2020-02-02T17:20:00+01:00",
+            "subtitle_language": null
+        }, ...
+    ]
+}
+```
+
+### `POST /api/mobile/restaurants`
+Return list of all restaurants around the cinema location that have our cuisine preference.
+##### JSON input example
+```
+{
+   "Date": "2020-01-31T17:15:00+01:00",
+   "CinemaLocation": {
+   		"lat": 52.5059,
+   		"lon": 13.3331,
+   		"address": "Hardenbergstraße 29A, 10623 Berlin"
+   },
+   "UserLocation":{
+   		"lat": 52.51379,
+   		"lon": 13.40342,
+   		"address": "Brüderstraße"
+   },
+   "CuisinePreferences": {
+      "Asian": 10,
+      "German": 5,
+      "Turkish": 7,
+      "Indian": 8,
+      "Mexican": 1
+   }
+}
+```
+##### JSON output example
+```
+{
+    "Restaurants": [
+        {
+            "lat": 52.499367,
+            "lon": 13.324972,
+            "address": "Uhlandstraße 161, Berlin",
+            "id": "6fa94197eef8e1617656fdd315c5475598ec1324",
+            "name": "Spice India",
+            "rating": 4.2,
+            "price_level": 2,
+            "open_now": false
+        }, ...
+    ]
+}
+```
+
+### `POST /api/mobile/journeys`
+Return list of all possible journeys for user location - cinema location and cinema location - restaurant location.
+##### JSON input example
+```
+{
+   "Date": "2020-01-31T17:15:00+01:00",
+   "CinemaLocation": {
+   		"lat": 52.5059,
+   		"lon": 13.3331,
+   		"address": "Hardenbergstraße 29A, 10623 Berlin"
+   },
+   "RestaurantLocation": {
+   		"lat": 52.5062864,
+   		"lon": 13.3178534,
+   		"address": "Kantstraße 30, Berlin"
+   },
+   "UserLocation":{
+   		"lat": 52.51379,
+   		"lon": 13.40342,
+   		"address": "Brüderstraße"
+   }
+}
+```
+##### JSON output example
+```
+{
+    "ToCinema": {
+        "1": [
+            {
+                "Step": 1,
+                "Stop": "Brüderstraße",
+                "Destination": "Fischerinsel",
+                "Distance": 225,
+                "DepartureTime": "2020-02-03T01:15:00+01:00",
+                "ArrivalTime": "2020-02-03T01:19:00+01:00",
+                "Mode": "Walking"
+            },
+            {
+                "Step": 2,
+                "Stop": "Fischerinsel",
+                "Destination": "S+U Zoologischer Garten/Jebensstr.",
+                "ArrivalTime": "2020-02-03T01:39:00+01:00",
+                "DepartureTime": "2020-02-03T01:17:00+01:00",
+                "Direction": "U Ruhleben",
+                "ArrivalPlatform": null,
+                "DeparturePlatform": null,
+                "LineName": "N2",
+                "Mode": "bus"
+            },
+            {
+                "Step": 3,
+                "Stop": "S+U Zoologischer Garten/Jebensstr.",
+                "Destination": "Hardenbergstraße 29A, 10623 Berlin",
+                "Distance": 227,
+                "DepartureTime": "2020-02-03T01:41:00+01:00",
+                "ArrivalTime": "2020-02-03T01:45:00+01:00",
+                "Mode": "Walking"
+            }
+        ], 
+        "2": ...
+
+    },
+    "ToRestaurant": {
+        "1": ...
+    }
+}
+```

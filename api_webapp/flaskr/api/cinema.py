@@ -113,3 +113,15 @@ def showtimes():
     else:
         error = "An error has occured: Refresh again. Error code: {}".format(response.status_code)
         return error
+
+
+@bp_cinema_api.route('/list_of_genres')
+def list_of_genres():
+    url = "https://api.internationalshowtimes.com/v4/genres/?apikey={}".format(cinema_api_key)
+    headers = {"Content-type": "application/json"}
+    response = requests.get(url=url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        error = "An error occurred getting the list_of_genres: Refresh again. Error code: {}".format(response.status_code)
+        return error
