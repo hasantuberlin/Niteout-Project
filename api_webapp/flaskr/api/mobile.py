@@ -1,6 +1,7 @@
 import requests
 import json
 from flask import Blueprint, request
+from datetime import datetime
 
 bp_mobile_api = Blueprint('mobile', __name__, url_prefix='/api/mobile')
 
@@ -177,15 +178,26 @@ def get_journeys():
             i=1
             for legs in journey['legs']:
                 legsdict={}
+                traveltime={}
                 legsdict['Step']=i
                 k=len(legs)
                 if k<=7:
                     if i==leg_len:
                         legsdict['Stop']=legs['origin']['name']
                         legsdict['Destination']=legs['destination']['address']
+                        endingtime=legs['arrival']
+                        endingtime=endingtime[:endingtime.index("+")]
+                        endingtime = datetime.strptime(endingtime, '%Y-%m-%dT%H:%M:%S')
+                        diff=endingtime-starttime
+                        diff=((diff).total_seconds())/60
+                        traveltime["TravelTime"]=diff
+                        CinemaJourneyList.append(traveltime)
                     elif i==1:
                         legsdict['Stop']=legs['origin']['address']
-                        legsdict['Destination']=legs['destination']['name']    
+                        legsdict['Destination']=legs['destination']['name']
+                        starttime=legs['departure']
+                        starttime=starttime[:starttime.index("+")]
+                        starttime = datetime.strptime(starttime, '%Y-%m-%dT%H:%M:%S')
                     else:
                         legsdict['Destination']=legs['destination']['name']
                         legsdict['Stop']=legs['origin']['name']
@@ -216,15 +228,26 @@ def get_journeys():
             i=1
             for legs in journey['legs']:
                 legsdict={}
+                traveltime={}
                 legsdict['Step']=i
                 k=len(legs)
                 if k<=7: # This indicates the walking
                     if i==leg_len:
                         legsdict['Stop']=legs['origin']['name']
                         legsdict['Destination']=legs['destination']['address']
+                        endingtime=legs["arrival"]
+                        endingtime=endingtime[:endingtime.index("+")]
+                        endingtime = datetime.strptime(endingtime, '%Y-%m-%dT%H:%M:%S')
+                        diff=endingtime-starttime
+                        diff=((diff).total_seconds())/60
+                        traveltime["TravelTime"]=diff
+                        RestaurantJourneyList.append(traveltime)
                     elif i==1:
                         legsdict['Stop']=legs['origin']['address']
-                        legsdict['Destination']=legs['destination']['name']    
+                        legsdict['Destination']=legs['destination']['name']
+                        starttime=legs['departure']
+                        starttime=starttime[:starttime.index("+")]
+                        starttime = datetime.strptime(starttime, '%Y-%m-%dT%H:%M:%S')
                     else:
                         legsdict['Destination']=legs['destination']['name']
                         legsdict['Stop']=legs['origin']['name']
@@ -245,6 +268,7 @@ def get_journeys():
                 i=i+1
                 RestaurantJourneyList.append(legsdict)
                 restraurant_journey[restaurant_journey_count]=RestaurantJourneyList
+                
             restaurant_journey_count=restaurant_journey_count+1        
         TransportDataDict={
         'ToCinema': cinema_journey,
