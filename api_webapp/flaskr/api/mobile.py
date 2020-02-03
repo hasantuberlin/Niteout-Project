@@ -191,7 +191,7 @@ def get_journeys():
         time_from = json_input["Date"]
 
         # Error handling caused by unresponsive BVG API
-        max_retries = 3
+        max_retries = 10
         num_retries = 0
         while num_retries < max_retries:
             cinema_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}'.format(user_lat, user_lon, user_address,
@@ -200,6 +200,9 @@ def get_journeys():
             if toCinemaResponse.content != b'An error has occured: Refresh again. Error code: 502':
                 break
             num_retries += 1
+        if num_retries == max_retries:
+            error = "An error has occurred on fetching cinema journey response: Refresh again. Error code: {}".format(toCinemaResponse.status_code)
+            return error
 
         num_retries = 0
         while num_retries < max_retries:
@@ -209,6 +212,9 @@ def get_journeys():
             if toRestaurantResponse.content != b'An error has occured: Refresh again. Error code: 502':
                 break
             num_retries += 1
+        if num_retries == max_retries:
+            error = "An error has occurred on fetching restaurant journey response: Refresh again. Error code: {}".format(toRestaurantResponse.status_code)
+            return error
 
         toCinemaResponse_json = toCinemaResponse.json()
         toRestaurantResponse_json = toRestaurantResponse.json()
