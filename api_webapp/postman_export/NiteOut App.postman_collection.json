@@ -55,7 +55,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n   \"Movie_id\": 1,\n   \"UserLat\": 52.51379,\n   \"UserLon\": 13.40342,\n   \"Date\": \"2020-01-31T17:15:00+01:00\",\n   \"CuisinePreferences\": {\n      \"Asian\": 1,\n      \"German\": 5,\n      \"Turkish\": 7,\n      \"Indian\": 8,\n      \"Mexican\": 1\n   }\n}",
+					"raw": "{\n        \"Date\": \"2020-01-31T17:15:00+01:00\",\n        \"MovieId\": 27149,\n        \"UserLat\": 52.51379,\n        \"UserLon\": 13.40342\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -63,7 +63,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:5000/api/mobile/restaurants",
+					"raw": "localhost:5000/api/mobile/showtimes",
 					"host": [
 						"localhost"
 					],
@@ -71,7 +71,79 @@
 					"path": [
 						"api",
 						"mobile",
-						"restaurants"
+						"showtimes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:5000/api/mobile/showtimes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"Date\": \"2020-01-31T17:15:00+01:00\",\n        \"MovieId\": 27149,\n        \"UserLat\": 52.51379,\n        \"UserLon\": 13.40342\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/mobile/showtimes",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"mobile",
+						"showtimes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:5000/api/mobile/journeys",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"Date\": \"2020-01-31T17:15:00+01:00\",\n        \"CinemaLocation\": {\n        \t\t\"lat\": 52.5059,\n        \t\t\"lon\": 13.3331,\n        \t\t\"address\": \"Hardenbergstraße 29A, 10623 Berlin\"\n        },\n        \"RestaurantLocation\": {\n        \t\t\"lat\": 52.5062864,\n        \t\t\"lon\": 13.3178534,\n        \t\t\"address\": \"Kantstraße 30, Berlin\"\n        },\n        \"UserLocation\":{\n        \t\t\"lat\": 52.51379,\n        \t\t\"lon\": 13.40342,\n        \t\t\"address\": \"Brüderstraße\"\n        }\n     }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/mobile/journeys",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"mobile",
+						"journeys"
 					]
 				}
 			},
