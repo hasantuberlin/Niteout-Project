@@ -317,8 +317,8 @@ def get_journeys():
                     legsdict['ArrivalTime'] = legs['arrival']
                     legsdict["DepartureTime"] = legs['departure']
                     legsdict['Direction'] = legs.get('direction', '')
-                    legsdict["ArrivalPlatform"] = legs.get('arrivalPlatform', '')
-                    legsdict["DeparturePlatform"] = legs.get('departurePlatform', '')
+                    #legsdict["ArrivalPlatform"] = legs.get('arrivalPlatform', '')
+                    #legsdict["DeparturePlatform"] = legs.get('departurePlatform', '')
                     legsdict['LineName'] = legs["line"]["name"]
                     legsdict['Mode'] = legs["line"]["mode"]
                 i = i + 1
