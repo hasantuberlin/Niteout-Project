@@ -227,7 +227,7 @@ def get_journeys():
             i=1
             for legs in journey['legs']:
                 legsdict={}
-                traveltime={}
+                #traveltime={}
                 legsdict['Step']=i
                 k=len(legs)
                 if k<=7:
@@ -239,8 +239,8 @@ def get_journeys():
                         endingtime = datetime.strptime(endingtime, '%Y-%m-%dT%H:%M:%S')
                         diff=endingtime-starttime
                         diff=((diff).total_seconds())/60
-                        traveltime["TravelTime"]=diff
-                        CinemaJourneyList.append(traveltime)
+                        #traveltime["TravelTime"]=diff
+                        #CinemaJourneyList.append(traveltime)
                     elif i==1:
                         legsdict['Stop']=legs['origin']['address']
                         legsdict['Destination']=legs['destination']['name']
@@ -266,7 +266,12 @@ def get_journeys():
                     legsdict['Mode'] = legs["line"]["mode"]
                 i = i + 1
                 CinemaJourneyList.append(legsdict)
-                cinema_journey[cinema_journey_count] = CinemaJourneyList
+                #cinema_journey[cinema_journey_count] = CinemaJourneyList
+                cinema_journey[cinema_journey_count]={}
+                cinema_journey[cinema_journey_count]["Journey"] = CinemaJourneyList
+                if i==leg_len+1:
+                    cinema_journey[cinema_journey_count]["TravelTime"] = diff
+
             cinema_journey_count = cinema_journey_count + 1
         restraurant_journey = {}
         restaurant_journey_count = 1
@@ -277,7 +282,7 @@ def get_journeys():
             i = 1
             for legs in journey['legs']:
                 legsdict={}
-                traveltime={}
+                #traveltime={}
                 legsdict['Step']=i
                 k=len(legs)
                 if k<=7: # This indicates the walking
@@ -289,8 +294,8 @@ def get_journeys():
                         endingtime = datetime.strptime(endingtime, '%Y-%m-%dT%H:%M:%S')
                         diff=endingtime-starttime
                         diff=((diff).total_seconds())/60
-                        traveltime["TravelTime"]=diff
-                        RestaurantJourneyList.append(traveltime)
+                        #traveltime["TravelTime"]=diff
+                        #RestaurantJourneyList.append(traveltime)
                     elif i==1:
                         legsdict['Stop']=legs['origin']['address']
                         legsdict['Destination']=legs['destination']['name']
@@ -316,7 +321,12 @@ def get_journeys():
                     legsdict['Mode'] = legs["line"]["mode"]
                 i = i + 1
                 RestaurantJourneyList.append(legsdict)
-                restraurant_journey[restaurant_journey_count] = RestaurantJourneyList
+                restraurant_journey[restaurant_journey_count]={}
+                restraurant_journey[restaurant_journey_count]["Journey"] = RestaurantJourneyList
+                if i==leg_len+1:
+                    restraurant_journey[restaurant_journey_count]["TravelTime"] = diff
+
+
             restaurant_journey_count = restaurant_journey_count + 1
         TransportDataDict = {
             'ToCinema': cinema_journey,
