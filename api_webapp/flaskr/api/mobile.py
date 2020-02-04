@@ -1,6 +1,6 @@
 import requests
 import json
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from datetime import datetime
 
 bp_mobile_api = Blueprint('mobile', __name__, url_prefix='/api/mobile')
@@ -56,8 +56,8 @@ def get_movies():
             movies.append(json_item)
 
         formatted_results["Movies"] = movies
-        formatted_json = json.dumps(formatted_results)
-        return formatted_results
+        formatted_json = jsonify(formatted_results)
+        return formatted_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
         return error
@@ -104,7 +104,7 @@ def get_showtimes():
             showtimes.append(json_item)
 
         formatted_results = {"Cinemas": cinemas, "Showtimes": showtimes}
-        formatted_json = json.dumps(formatted_results)
+        formatted_json = jsonify(formatted_results)
         return formatted_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
@@ -142,7 +142,7 @@ def get_restaurants():
             restaurants.append(json_item)
 
         formatted_results["Restaurants"] = restaurants
-        formatted_json = json.dumps(formatted_results)
+        formatted_json = jsonify(formatted_results)
         return formatted_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
@@ -322,7 +322,7 @@ def get_journeys():
             'ToCinema': cinema_journey,
             'ToRestaurant': restraurant_journey
         }
-        Trasnport_json = json.dumps(TransportDataDict)
+        Trasnport_json = jsonify(TransportDataDict)
         return Trasnport_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
