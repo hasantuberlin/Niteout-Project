@@ -195,7 +195,7 @@ def get_journeys():
         max_retries = 10
         num_retries = 0
         while num_retries < max_retries:
-            cinema_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}'.format(user_lat, user_lon, user_address,
+            cinema_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}&results=1'.format(user_lat, user_lon, user_address,
                                                                                                                                                                cinema_lat, cinema_lon, cinema_address)
             toCinemaResponse = requests.get(cinema_journey_request)
             if toCinemaResponse.content != b'An error has occured: Refresh again. Error code: 502':
@@ -208,7 +208,7 @@ def get_journeys():
 
         num_retries = 0
         while num_retries < max_retries:
-            restaurant_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}'.format(cinema_lat, cinema_lon, cinema_address,
+            restaurant_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}&results=1'.format(cinema_lat, cinema_lon, cinema_address,
                                                                                                                                                                         restaurant_lat, restaurant_lon, restaurant_address)
             toRestaurantResponse = requests.get(restaurant_journey_request)
             if toRestaurantResponse.content != b'An error has occured: Refresh again. Error code: 502':
@@ -262,8 +262,8 @@ def get_journeys():
                     legsdict['ArrivalTime'] = legs['arrival']
                     legsdict["DepartureTime"] = legs['departure']
                     legsdict['Direction'] = legs.get('direction', '')
-                    legsdict["ArrivalPlatform"] = legs.get('arrivalPlatform', '')
-                    legsdict["DeparturePlatform"] = legs.get('departurePlatform', '')
+                    #legsdict["ArrivalPlatform"] = legs.get('arrivalPlatform', '')
+                    #legsdict["DeparturePlatform"] = legs.get('departurePlatform', '')
                     legsdict['LineName'] = legs["line"]["name"]
                     legsdict['Mode'] = legs["line"]["mode"]
                 i = i + 1
@@ -275,9 +275,9 @@ def get_journeys():
                     cinema_journey[cinema_journey_count]["TravelTime"] = diff
 
             cinema_journey_count = cinema_journey_count + 1
+
         restraurant_journey = {}
         restaurant_journey_count = 1
-
         for journey in toRestaurantResponse_json['journeys']:
             RestaurantJourneyList = []
             leg_len = len(journey['legs'])
