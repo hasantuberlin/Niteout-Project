@@ -333,38 +333,41 @@ Return list of all possible journeys for user location - cinema location and cin
 ```
 {
     "ToCinema": {
-        "1": [
-            {
-                "Step": 1,
-                "Stop": "Brüderstraße",
-                "Destination": "Fischerinsel",
-                "Distance": 225,
-                "DepartureTime": "2020-02-03T01:15:00+01:00",
-                "ArrivalTime": "2020-02-03T01:19:00+01:00",
-                "Mode": "Walking"
-            },
-            {
-                "Step": 2,
-                "Stop": "Fischerinsel",
-                "Destination": "S+U Zoologischer Garten/Jebensstr.",
-                "ArrivalTime": "2020-02-03T01:39:00+01:00",
-                "DepartureTime": "2020-02-03T01:17:00+01:00",
-                "Direction": "U Ruhleben",
-                "ArrivalPlatform": null,
-                "DeparturePlatform": null,
-                "LineName": "N2",
-                "Mode": "bus"
-            },
-            {
-                "Step": 3,
-                "Stop": "S+U Zoologischer Garten/Jebensstr.",
-                "Destination": "Hardenbergstraße 29A, 10623 Berlin",
-                "Distance": 227,
-                "DepartureTime": "2020-02-03T01:41:00+01:00",
-                "ArrivalTime": "2020-02-03T01:45:00+01:00",
-                "Mode": "Walking"
-            }
-        ], 
+        "1": {
+            "Journey": [
+                {
+                    "ArrivalTime": "2020-02-04T20:05:00+01:00",
+                    "DepartureTime": "2020-02-04T19:58:00+01:00",
+                    "Destination": "U Spittelmarkt",
+                    "Distance": 388,
+                    "Mode": "Walking",
+                    "Step": 1,
+                    "Stop": "Brüderstraße"
+                },
+                {
+                    "ArrivalPlatform": null,
+                    "ArrivalTime": "2020-02-04T20:22:00+01:00",
+                    "DeparturePlatform": null,
+                    "DepartureTime": "2020-02-04T20:05:00+01:00",
+                    "Destination": "S+U Zoologischer Garten",
+                    "Direction": "U Ruhleben",
+                    "LineName": "U2",
+                    "Mode": "train",
+                    "Step": 2,
+                    "Stop": "U Spittelmarkt"
+                },
+                {
+                    "ArrivalTime": "2020-02-04T20:25:00+01:00",
+                    "DepartureTime": "2020-02-04T20:22:00+01:00",
+                    "Destination": "Hardenbergstraße 29A, 10623 Berlin",
+                    "Distance": 147,
+                    "Mode": "Walking",
+                    "Step": 3,
+                    "Stop": "S+U Zoologischer Garten"
+                }
+            ],
+            "TravelTime": 27
+        },
         "2": ...
 
     },

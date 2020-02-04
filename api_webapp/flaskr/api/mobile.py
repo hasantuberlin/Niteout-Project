@@ -1,7 +1,7 @@
 import requests
-import json
 from flask import Blueprint, request, jsonify
 from datetime import datetime
+import time
 
 bp_mobile_api = Blueprint('mobile', __name__, url_prefix='/api/mobile')
 
@@ -45,7 +45,7 @@ def get_movies():
             json_item = {}
             json_item["movie_id"] = item.get("id")
             json_item["title"] = item.get("title")
-            json_item["poster"] = item.get("poster_image_thumbnail")
+            json_item["poster"] = item.get("poster_image_thumbnail", "")
             # workaround on ratings
             ratings = item.get("ratings")
             if ratings:
@@ -121,8 +121,8 @@ def get_restaurants():
         most_voted_cuisine = max(cuisine_preferences, key=lambda key: cuisine_preferences[key])
         print(most_voted_cuisine)
 
-        lat = json_input["CinemaLocation"]["lat"]
-        lon = json_input["CinemaLocation"]["lon"]
+        lat = json_input["CinemaLocation"].get("lat", "")
+        lon = json_input["CinemaLocation"].get("lon", "")
 
         restaurant_request = 'http://127.0.0.1:5000/api/restaurants/?location={},{}&radius=1000&cuisine={}'.format(lat,
                                                                                                                    lon,
@@ -177,17 +177,17 @@ def get_journeys():
     if request.is_json:
         json_input = request.get_json()
 
-        user_lat = json_input["UserLocation"]["lat"]
-        user_lon = json_input["UserLocation"]["lon"]
-        user_address = json_input["UserLocation"]["address"]
+        user_lat = json_input["UserLocation"].get("lat", "")
+        user_lon = json_input["UserLocation"].get("lon", "")
+        user_address = json_input["UserLocation"].get("address", "")
 
-        cinema_lat = json_input["CinemaLocation"]["lat"]
-        cinema_lon = json_input["CinemaLocation"]["lon"]
-        cinema_address = json_input["CinemaLocation"]["address"]
+        cinema_lat = json_input["CinemaLocation"].get("lat", "")
+        cinema_lon = json_input["CinemaLocation"].get("lon", "")
+        cinema_address = json_input["CinemaLocation"].get("address", "")
 
-        restaurant_lat = json_input["RestaurantLocation"]["lat"]
-        restaurant_lon = json_input["RestaurantLocation"]["lon"]
-        restaurant_address = json_input["RestaurantLocation"]["address"]
+        restaurant_lat = json_input["RestaurantLocation"].get("lat", "")
+        restaurant_lon = json_input["RestaurantLocation"].get("lon", "")
+        restaurant_address = json_input["RestaurantLocation"].get("address", "")
 
         time_from = json_input["Date"]
 
@@ -201,6 +201,7 @@ def get_journeys():
             if toCinemaResponse.content != b'An error has occured: Refresh again. Error code: 502':
                 break
             num_retries += 1
+            time.sleep(1)
         if num_retries == max_retries:
             error = "An error has occurred on fetching cinema journey response: Refresh again. Error code: {}".format(toCinemaResponse.status_code)
             return error
@@ -213,6 +214,7 @@ def get_journeys():
             if toRestaurantResponse.content != b'An error has occured: Refresh again. Error code: 502':
                 break
             num_retries += 1
+            time.sleep(1)
         if num_retries == max_retries:
             error = "An error has occurred on fetching restaurant journey response: Refresh again. Error code: {}".format(toRestaurantResponse.status_code)
             return error
@@ -250,7 +252,7 @@ def get_journeys():
                     else:
                         legsdict['Destination'] = legs['destination']['name']
                         legsdict['Stop'] = legs['origin']['name']
-                    legsdict['Distance'] = legs['distance']
+                    legsdict['Distance'] = legs.get('distance', '')
                     legsdict["DepartureTime"] = legs['departure']
                     legsdict['ArrivalTime'] = legs['arrival']
                     legsdict['Mode'] = "Walking"
@@ -259,9 +261,9 @@ def get_journeys():
                     legsdict['Destination'] = legs['destination']['name']
                     legsdict['ArrivalTime'] = legs['arrival']
                     legsdict["DepartureTime"] = legs['departure']
-                    legsdict['Direction'] = legs["direction"]
-                    legsdict["ArrivalPlatform"] = legs["arrivalPlatform"]
-                    legsdict["DeparturePlatform"] = legs["departurePlatform"]
+                    legsdict['Direction'] = legs.get('direction', '')
+                    legsdict["ArrivalPlatform"] = legs.get('arrivalPlatform', '')
+                    legsdict["DeparturePlatform"] = legs.get('departurePlatform', '')
                     legsdict['LineName'] = legs["line"]["name"]
                     legsdict['Mode'] = legs["line"]["mode"]
                 i = i + 1
@@ -305,7 +307,7 @@ def get_journeys():
                     else:
                         legsdict['Destination'] = legs['destination']['name']
                         legsdict['Stop'] = legs['origin']['name']
-                    legsdict['Distance'] = legs['distance']
+                    legsdict['Distance'] = legs.get('distance', '')
                     legsdict["DepartureTime"] = legs['departure']
                     legsdict['ArrivalTime'] = legs['arrival']
                     legsdict['Mode'] = "Walking"
@@ -314,9 +316,9 @@ def get_journeys():
                     legsdict['Destination'] = legs['destination']['name']
                     legsdict['ArrivalTime'] = legs['arrival']
                     legsdict["DepartureTime"] = legs['departure']
-                    legsdict['Direction'] = legs["direction"]
-                    legsdict["ArrivalPlatform"] = legs["arrivalPlatform"]
-                    legsdict["DeparturePlatform"] = legs["departurePlatform"]
+                    legsdict['Direction'] = legs.get('direction', '')
+                    legsdict["ArrivalPlatform"] = legs.get('arrivalPlatform', '')
+                    legsdict["DeparturePlatform"] = legs.get('departurePlatform', '')
                     legsdict['LineName'] = legs["line"]["name"]
                     legsdict['Mode'] = legs["line"]["mode"]
                 i = i + 1
