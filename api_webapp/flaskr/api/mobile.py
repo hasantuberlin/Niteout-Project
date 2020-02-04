@@ -1,6 +1,7 @@
 import requests
 import json
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
+from datetime import datetime
 
 bp_mobile_api = Blueprint('mobile', __name__, url_prefix='/api/mobile')
 
@@ -55,8 +56,8 @@ def get_movies():
             movies.append(json_item)
 
         formatted_results["Movies"] = movies
-        formatted_json = json.dumps(formatted_results)
-        return formatted_results
+        formatted_json = jsonify(formatted_results)
+        return formatted_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
         return error
@@ -103,7 +104,7 @@ def get_showtimes():
             showtimes.append(json_item)
 
         formatted_results = {"Cinemas": cinemas, "Showtimes": showtimes}
-        formatted_json = json.dumps(formatted_results)
+        formatted_json = jsonify(formatted_results)
         return formatted_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
@@ -141,7 +142,7 @@ def get_restaurants():
             restaurants.append(json_item)
 
         formatted_results["Restaurants"] = restaurants
-        formatted_json = json.dumps(formatted_results)
+        formatted_json = jsonify(formatted_results)
         return formatted_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
@@ -225,16 +226,27 @@ def get_journeys():
             leg_len=len(journey['legs'])
             i=1
             for legs in journey['legs']:
-                legsdict = {}
-                legsdict['Step'] = i
-                k = len(legs)
-                if k <= 7:
-                    if i == leg_len:
-                        legsdict['Stop'] = legs['origin']['name']
-                        legsdict['Destination'] = legs['destination']['address']
-                    elif i == 1:
-                        legsdict['Stop'] = legs['origin']['address']
-                        legsdict['Destination'] = legs['destination']['name']
+                legsdict={}
+                traveltime={}
+                legsdict['Step']=i
+                k=len(legs)
+                if k<=7:
+                    if i==leg_len:
+                        legsdict['Stop']=legs['origin']['name']
+                        legsdict['Destination']=legs['destination']['address']
+                        endingtime=legs['arrival']
+                        endingtime=endingtime[:endingtime.index("+")]
+                        endingtime = datetime.strptime(endingtime, '%Y-%m-%dT%H:%M:%S')
+                        diff=endingtime-starttime
+                        diff=((diff).total_seconds())/60
+                        traveltime["TravelTime"]=diff
+                        CinemaJourneyList.append(traveltime)
+                    elif i==1:
+                        legsdict['Stop']=legs['origin']['address']
+                        legsdict['Destination']=legs['destination']['name']
+                        starttime=legs['departure']
+                        starttime=starttime[:starttime.index("+")]
+                        starttime = datetime.strptime(starttime, '%Y-%m-%dT%H:%M:%S')
                     else:
                         legsdict['Destination'] = legs['destination']['name']
                         legsdict['Stop'] = legs['origin']['name']
@@ -264,16 +276,27 @@ def get_journeys():
             leg_len = len(journey['legs'])
             i = 1
             for legs in journey['legs']:
-                legsdict = {}
-                legsdict['Step'] = i
-                k = len(legs)
-                if k <= 7:  # This indicates the walking
-                    if i == leg_len:
-                        legsdict['Stop'] = legs['origin']['name']
-                        legsdict['Destination'] = legs['destination']['address']
-                    elif i == 1:
-                        legsdict['Stop'] = legs['origin']['address']
-                        legsdict['Destination'] = legs['destination']['name']
+                legsdict={}
+                traveltime={}
+                legsdict['Step']=i
+                k=len(legs)
+                if k<=7: # This indicates the walking
+                    if i==leg_len:
+                        legsdict['Stop']=legs['origin']['name']
+                        legsdict['Destination']=legs['destination']['address']
+                        endingtime=legs["arrival"]
+                        endingtime=endingtime[:endingtime.index("+")]
+                        endingtime = datetime.strptime(endingtime, '%Y-%m-%dT%H:%M:%S')
+                        diff=endingtime-starttime
+                        diff=((diff).total_seconds())/60
+                        traveltime["TravelTime"]=diff
+                        RestaurantJourneyList.append(traveltime)
+                    elif i==1:
+                        legsdict['Stop']=legs['origin']['address']
+                        legsdict['Destination']=legs['destination']['name']
+                        starttime=legs['departure']
+                        starttime=starttime[:starttime.index("+")]
+                        starttime = datetime.strptime(starttime, '%Y-%m-%dT%H:%M:%S')
                     else:
                         legsdict['Destination'] = legs['destination']['name']
                         legsdict['Stop'] = legs['origin']['name']
@@ -299,7 +322,7 @@ def get_journeys():
             'ToCinema': cinema_journey,
             'ToRestaurant': restraurant_journey
         }
-        Trasnport_json = json.dumps(TransportDataDict)
+        Trasnport_json = jsonify(TransportDataDict)
         return Trasnport_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
