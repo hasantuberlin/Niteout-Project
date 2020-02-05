@@ -1,0 +1,272 @@
+{
+    "genres": [
+        {
+            "id": "0",
+            "name": "Action"
+        },
+        {
+            "id": "1",
+            "name": "Adventure"
+        },
+        {
+            "id": "2",
+            "name": "Animation"
+        },
+        {
+            "id": "3",
+            "name": "Comedy"
+        },
+        {
+            "id": "4",
+            "name": "Crime"
+        },
+        {
+            "id": "5",
+            "name": "Documentary"
+        },
+        {
+            "id": "6",
+            "name": "Drama"
+        },
+        {
+            "id": "7",
+            "name": "Family"
+        },
+        {
+            "id": "8",
+            "name": "Fantasy"
+        },
+        {
+            "id": "9",
+            "name": "Foreign"
+        },
+        {
+            "id": "10",
+            "name": "History"
+        },
+        {
+            "id": "11",
+            "name": "Horror"
+        },
+        {
+            "id": "12",
+            "name": "Music"
+        },
+        {
+            "id": "13",
+            "name": "Mystery"
+        },
+        {
+            "id": "14",
+            "name": "Romance"
+        },
+        {
+            "id": "15",
+            "name": "Science Fiction"
+        },
+        {
+            "id": "16",
+            "name": "TV Movie"
+        },
+        {
+            "id": "17",
+            "name": "Thriller"
+        },
+        {
+            "id": "18",
+            "name": "War"
+        },
+        {
+            "id": "19",
+            "name": "Western"
+        },
+        {
+            "id": "20",
+            "name": "Family"
+        },
+        {
+            "id": "22",
+            "name": "Romance"
+        },
+        {
+            "id": "24",
+            "name": "Biography"
+        },
+        {
+            "id": "25",
+            "name": "Animation"
+        },
+        {
+            "id": "27",
+            "name": "Musical"
+        },
+        {
+            "id": "28",
+            "name": "Sport"
+        },
+        {
+            "id": "29",
+            "name": "NobleCinemaWide"
+        },
+        {
+            "id": "31",
+            "name": "News"
+        },
+        {
+            "id": "33",
+            "name": "Short"
+        },
+        {
+            "id": "67",
+            "name": "Comedia"
+        },
+        {
+            "id": "72",
+            "name": "Film-Noir"
+        },
+        {
+            "id": "95",
+            "name": "Film-Noir"
+        },
+        {
+            "id": "103",
+            "name": "Independent"
+        },
+        {
+            "id": "122",
+            "name": "Sci-Fi"
+        },
+        {
+            "id": "123",
+            "name": "Historical"
+        },
+        {
+            "id": "124",
+            "name": "Family Animation"
+        },
+        {
+            "id": "125",
+            "name": "Romantic Comedy"
+        },
+        {
+            "id": "126",
+            "name": "Biopic"
+        },
+        {
+            "id": "127",
+            "name": "Reality-TV"
+        },
+        {
+            "id": "128",
+            "name": "Adult"
+        },
+        {
+            "id": "129",
+            "name": "Docudrama"
+        },
+        {
+            "id": "130",
+            "name": "War Drama"
+        },
+        {
+            "id": "131",
+            "name": "Vampire"
+        },
+        {
+            "id": "133",
+            "name": "Bio"
+        },
+        {
+            "id": "134",
+            "name": "Game-Show"
+        },
+        {
+            "id": "135",
+            "name": "Crime Thriller"
+        },
+        {
+            "id": "136",
+            "name": "Supernatural"
+        },
+        {
+            "id": "137",
+            "name": "Crime Drama"
+        },
+        {
+            "id": "139",
+            "name": "Children"
+        },
+        {
+            "id": "140",
+            "name": "12A"
+        },
+        {
+            "id": "141",
+            "name": "Suspense"
+        },
+        {
+            "id": "142",
+            "name": "Opera"
+        },
+        {
+            "id": "143",
+            "name": "Children's"
+        },
+        {
+            "id": "146",
+            "name": "PG"
+        },
+        {
+            "id": "147",
+            "name": "Music Drama"
+        },
+        {
+            "id": "148",
+            "name": "Comedy Horror"
+        },
+        {
+            "id": "149",
+            "name": "Sports Documentary"
+        },
+        {
+            "id": "152",
+            "name": "Fantasy Drama"
+        },
+        {
+            "id": "153",
+            "name": "Romantic"
+        },
+        {
+            "id": "154",
+            "name": "16"
+        },
+        {
+            "id": "155",
+            "name": "Family Drama"
+        },
+        {
+            "id": "156",
+            "name": "Historical Drama"
+        },
+        {
+            "id": "157",
+            "name": "Sci-Fi Action"
+        },
+        {
+            "id": "159",
+            "name": "Family Musical"
+        },
+        {
+            "id": "160",
+            "name": "Anime"
+        },
+        {
+            "id": "161",
+            "name": "Sci-Fi Drama"
+        },
+        {
+            "id": "163",
+            "name": "Action Thriller"
+        }
+    ]
+}
