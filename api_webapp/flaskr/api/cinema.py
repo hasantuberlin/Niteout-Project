@@ -1,5 +1,6 @@
 import requests
 import json
+import datetime
 from werkzeug.exceptions import BadRequest
 from flask import Blueprint, request
 
@@ -142,9 +143,9 @@ def parse_float(value):
     except:
         return False
 
-def parse_datetime(location):
+def parse_datetime(datetime_string):
     try:
-        datetime.datetime.fromisoformat(location)
+        datetime.datetime.fromisoformat(datetime_string)
         return True
     except:
         return False
