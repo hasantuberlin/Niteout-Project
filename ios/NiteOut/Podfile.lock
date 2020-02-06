@@ -1,0 +1,53 @@
+PODS:
+  - Alamofire (4.9.1)
+  - Alamofire-SwiftyJSON (3.0.0):
+    - Alamofire (~> 4.5)
+    - SwiftyJSON (~> 4.0.0)
+  - DropDown (2.3.13)
+  - GoogleMaps (3.6.0):
+    - GoogleMaps/Maps (= 3.6.0)
+  - GoogleMaps/Base (3.6.0)
+  - GoogleMaps/Maps (3.6.0):
+    - GoogleMaps/Base
+  - Kingfisher (5.11.0):
+    - Kingfisher/Core (= 5.11.0)
+  - Kingfisher/Core (5.11.0)
+  - NVActivityIndicatorView (4.8.0):
+    - NVActivityIndicatorView/Presenter (= 4.8.0)
+  - NVActivityIndicatorView/Presenter (4.8.0)
+  - SwiftyJSON (4.0.0)
+  - TextFieldEffects (1.6.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - Alamofire-SwiftyJSON
+  - DropDown
+  - GoogleMaps
+  - Kingfisher
+  - NVActivityIndicatorView
+  - TextFieldEffects
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - Alamofire-SwiftyJSON
+    - DropDown
+    - GoogleMaps
+    - Kingfisher
+    - NVActivityIndicatorView
+    - SwiftyJSON
+    - TextFieldEffects
+
+SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  Alamofire-SwiftyJSON: 2b3649d57dc7bb2880fb8b86f8bb969397666916
+  DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
+  GoogleMaps: 82f8fe307193bb4de6ef6bf9e88f1d624b718f9d
+  Kingfisher: 4569606189149e19c7d9439f47e885d0679b7a90
+  NVActivityIndicatorView: d24b7ebcf80af5dcd994adb650e2b6c93379270f
+  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+  TextFieldEffects: 529b8aff706fb40f82c41c780c0777941a893796
+
+PODFILE CHECKSUM: 5e3008fe2e55a5ebfb08cbbec2a308ec7ce6d46e
+
+COCOAPODS: 1.8.4
