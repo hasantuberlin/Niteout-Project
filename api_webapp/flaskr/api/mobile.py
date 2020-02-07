@@ -46,6 +46,7 @@ def get_movies():
             json_item["movie_id"] = item.get("id")
             json_item["title"] = item.get("title")
             json_item["poster"] = item.get("poster_image_thumbnail", "")
+            json_item["genres"] = item.get("genres")
             # workaround on ratings
             ratings = item.get("ratings")
             if ratings:
@@ -105,7 +106,7 @@ def get_showtimes():
 
         formatted_results = {"Cinemas": cinemas, "Showtimes": showtimes}
         formatted_json = jsonify(formatted_results)
-        return formatted_json
+        return r_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
         return error
