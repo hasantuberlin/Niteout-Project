@@ -116,7 +116,6 @@ def get_showtimes():
 def get_restaurants():
     if request.is_json:
         json_input = request.get_json()
-        print(json_input)
 
         cuisine_preferences = json_input["CuisinePreferences"]
         most_voted_cuisine = max(cuisine_preferences, key=lambda key: cuisine_preferences[key])
@@ -137,9 +136,16 @@ def get_restaurants():
         formatted_results = {"Restaurants": []}
         for item in results:
             json_item = {"lat": item.get("geometry").get("location").get("lat"),
-                         "lon": item.get("geometry").get("location").get("lng"), "address": item.get("vicinity"),
-                         "id": item.get("id"), "name": item.get("name"), "rating": item.get("rating"),
-                         "price_level": item.get("price_level"), "open_now": item.get("opening_hours").get("open_now")}
+                         "lon": item.get("geometry").get("location").get("lng"),
+                         "address": item.get("vicinity"),
+                         "id": item.get("id"),
+                         "name": item.get("name"),
+                         "rating": item.get("rating"),
+                         "price_level": item.get("price_level")}
+            if(item.get("opening_hours") != None):
+                json_item["open_now"] = item.get("opening_hours").get("open_now")
+            else:
+                json_item["open_now"] = ""
             restaurants.append(json_item)
 
         formatted_results["Restaurants"] = restaurants
