@@ -1,6 +1,6 @@
 import requests
 from flask import Blueprint, request, jsonify
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 
 bp_mobile_api = Blueprint('mobile', __name__, url_prefix='/api/mobile')
@@ -197,13 +197,12 @@ def get_journeys():
         restaurant_address = json_input["RestaurantLocation"].get("address", "")
 
         time_from = json_input["Date"]
-
         # Error handling caused by unresponsive BVG API
         max_retries = 10
         num_retries = 0
         while num_retries < max_retries:
-            cinema_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}&results=1'.format(user_lat, user_lon, user_address,
-                                                                                                                                                               cinema_lat, cinema_lon, cinema_address)
+            cinema_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}&departure={}&results=1'.format(user_lat, user_lon, user_address,
+                                                                                                                                                               cinema_lat, cinema_lon, cinema_address, time_from)
             toCinemaResponse = requests.get(cinema_journey_request)
             if toCinemaResponse.content != b'An error has occured: Refresh again. Error code: 502':
                 break
@@ -214,9 +213,15 @@ def get_journeys():
             return error
 
         num_retries = 0
+
+        # Add buffer to the second connection departure
+        time_from_dt = datetime.strptime(time_from[:19], "%Y-%m-%dT%H:%M:%S")
+        time_from2 = time_from_dt + timedelta(hours=2, minutes=30)
+        time_from2 = time_from2.strftime('%Y-%m-%dT%H:%M:%S')
+
         while num_retries < max_retries:
-            restaurant_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}&results=1'.format(cinema_lat, cinema_lon, cinema_address,
-                                                                                                                                                                        restaurant_lat, restaurant_lon, restaurant_address)
+            restaurant_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}&departure={}&results=1'.format(cinema_lat, cinema_lon, cinema_address,
+                                                                                                                                                                        restaurant_lat, restaurant_lon, restaurant_address, time_from2)
             toRestaurantResponse = requests.get(restaurant_journey_request)
             if toRestaurantResponse.content != b'An error has occured: Refresh again. Error code: 502':
                 break
