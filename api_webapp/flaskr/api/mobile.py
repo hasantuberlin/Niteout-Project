@@ -1,6 +1,7 @@
 import requests
-import json
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
+from datetime import datetime, timedelta
+import time
 
 bp_mobile_api = Blueprint('mobile', __name__, url_prefix='/api/mobile')
 
@@ -44,7 +45,8 @@ def get_movies():
             json_item = {}
             json_item["movie_id"] = item.get("id")
             json_item["title"] = item.get("title")
-            json_item["poster"] = item.get("poster_image_thumbnail")
+            json_item["poster"] = item.get("poster_image_thumbnail", "")
+            json_item["genres"] = item.get("genres")
             # workaround on ratings
             ratings = item.get("ratings")
             if ratings:
@@ -55,8 +57,8 @@ def get_movies():
             movies.append(json_item)
 
         formatted_results["Movies"] = movies
-        formatted_json = json.dumps(formatted_results)
-        return formatted_results
+        formatted_json = jsonify(formatted_results)
+        return formatted_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
         return error
@@ -103,7 +105,7 @@ def get_showtimes():
             showtimes.append(json_item)
 
         formatted_results = {"Cinemas": cinemas, "Showtimes": showtimes}
-        formatted_json = json.dumps(formatted_results)
+        formatted_json = jsonify(formatted_results)
         return formatted_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
@@ -114,14 +116,13 @@ def get_showtimes():
 def get_restaurants():
     if request.is_json:
         json_input = request.get_json()
-        print(json_input)
 
         cuisine_preferences = json_input["CuisinePreferences"]
         most_voted_cuisine = max(cuisine_preferences, key=lambda key: cuisine_preferences[key])
         print(most_voted_cuisine)
 
-        lat = json_input["CinemaLocation"]["lat"]
-        lon = json_input["CinemaLocation"]["lon"]
+        lat = json_input["CinemaLocation"].get("lat", "")
+        lon = json_input["CinemaLocation"].get("lon", "")
 
         restaurant_request = 'http://127.0.0.1:5000/api/restaurants/?location={},{}&radius=1000&cuisine={}'.format(lat,
                                                                                                                    lon,
@@ -135,13 +136,20 @@ def get_restaurants():
         formatted_results = {"Restaurants": []}
         for item in results:
             json_item = {"lat": item.get("geometry").get("location").get("lat"),
-                         "lon": item.get("geometry").get("location").get("lng"), "address": item.get("vicinity"),
-                         "id": item.get("id"), "name": item.get("name"), "rating": item.get("rating"),
-                         "price_level": item.get("price_level"), "open_now": item.get("opening_hours").get("open_now")}
+                         "lon": item.get("geometry").get("location").get("lng"),
+                         "address": item.get("vicinity"),
+                         "id": item.get("id"),
+                         "name": item.get("name"),
+                         "rating": item.get("rating"),
+                         "price_level": item.get("price_level")}
+            if(item.get("opening_hours") != None):
+                json_item["open_now"] = item.get("opening_hours").get("open_now")
+            else:
+                json_item["open_now"] = ""
             restaurants.append(json_item)
 
         formatted_results["Restaurants"] = restaurants
-        formatted_json = json.dumps(formatted_results)
+        formatted_json = jsonify(formatted_results)
         return formatted_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
@@ -176,42 +184,49 @@ def get_journeys():
     if request.is_json:
         json_input = request.get_json()
 
-        user_lat = json_input["UserLocation"]["lat"]
-        user_lon = json_input["UserLocation"]["lon"]
-        user_address = json_input["UserLocation"]["address"]
+        user_lat = json_input["UserLocation"].get("lat", "")
+        user_lon = json_input["UserLocation"].get("lon", "")
+        user_address = json_input["UserLocation"].get("address", "")
 
-        cinema_lat = json_input["CinemaLocation"]["lat"]
-        cinema_lon = json_input["CinemaLocation"]["lon"]
-        cinema_address = json_input["CinemaLocation"]["address"]
+        cinema_lat = json_input["CinemaLocation"].get("lat", "")
+        cinema_lon = json_input["CinemaLocation"].get("lon", "")
+        cinema_address = json_input["CinemaLocation"].get("address", "")
 
-        restaurant_lat = json_input["RestaurantLocation"]["lat"]
-        restaurant_lon = json_input["RestaurantLocation"]["lon"]
-        restaurant_address = json_input["RestaurantLocation"]["address"]
+        restaurant_lat = json_input["RestaurantLocation"].get("lat", "")
+        restaurant_lon = json_input["RestaurantLocation"].get("lon", "")
+        restaurant_address = json_input["RestaurantLocation"].get("address", "")
 
         time_from = json_input["Date"]
-
         # Error handling caused by unresponsive BVG API
         max_retries = 10
         num_retries = 0
         while num_retries < max_retries:
-            cinema_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}'.format(user_lat, user_lon, user_address,
-                                                                                                                                                               cinema_lat, cinema_lon, cinema_address)
+            cinema_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}&departure={}&results=1'.format(user_lat, user_lon, user_address,
+                                                                                                                                                               cinema_lat, cinema_lon, cinema_address, time_from)
             toCinemaResponse = requests.get(cinema_journey_request)
             if toCinemaResponse.content != b'An error has occured: Refresh again. Error code: 502':
                 break
             num_retries += 1
+            time.sleep(1)
         if num_retries == max_retries:
             error = "An error has occurred on fetching cinema journey response: Refresh again. Error code: {}".format(toCinemaResponse.status_code)
             return error
 
         num_retries = 0
+
+        # Add buffer to the second connection departure
+        time_from_dt = datetime.strptime(time_from[:19], "%Y-%m-%dT%H:%M:%S")
+        time_from2 = time_from_dt + timedelta(hours=2, minutes=30)
+        time_from2 = time_from2.strftime('%Y-%m-%dT%H:%M:%S')
+
         while num_retries < max_retries:
-            restaurant_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}'.format(cinema_lat, cinema_lon, cinema_address,
-                                                                                                                                                                        restaurant_lat, restaurant_lon, restaurant_address)
+            restaurant_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}&departure={}&results=1'.format(cinema_lat, cinema_lon, cinema_address,
+                                                                                                                                                                        restaurant_lat, restaurant_lon, restaurant_address, time_from2)
             toRestaurantResponse = requests.get(restaurant_journey_request)
             if toRestaurantResponse.content != b'An error has occured: Refresh again. Error code: 502':
                 break
             num_retries += 1
+            time.sleep(1)
         if num_retries == max_retries:
             error = "An error has occurred on fetching restaurant journey response: Refresh again. Error code: {}".format(toRestaurantResponse.status_code)
             return error
@@ -225,20 +240,31 @@ def get_journeys():
             leg_len=len(journey['legs'])
             i=1
             for legs in journey['legs']:
-                legsdict = {}
-                legsdict['Step'] = i
-                k = len(legs)
-                if k <= 7:
-                    if i == leg_len:
-                        legsdict['Stop'] = legs['origin']['name']
-                        legsdict['Destination'] = legs['destination']['address']
-                    elif i == 1:
-                        legsdict['Stop'] = legs['origin']['address']
-                        legsdict['Destination'] = legs['destination']['name']
+                legsdict={}
+                #traveltime={}
+                legsdict['Step']=i
+                k=len(legs)
+                if k<=7:
+                    if i==leg_len:
+                        legsdict['Stop']=legs['origin']['name']
+                        legsdict['Destination']=legs['destination']['address']
+                        endingtime=legs['arrival']
+                        endingtime=endingtime[:endingtime.index("+")]
+                        endingtime = datetime.strptime(endingtime, '%Y-%m-%dT%H:%M:%S')
+                        diff=endingtime-starttime
+                        diff=((diff).total_seconds())/60
+                        #traveltime["TravelTime"]=diff
+                        #CinemaJourneyList.append(traveltime)
+                    elif i==1:
+                        legsdict['Stop']=legs['origin']['address']
+                        legsdict['Destination']=legs['destination']['name']
+                        starttime=legs['departure']
+                        starttime=starttime[:starttime.index("+")]
+                        starttime = datetime.strptime(starttime, '%Y-%m-%dT%H:%M:%S')
                     else:
                         legsdict['Destination'] = legs['destination']['name']
                         legsdict['Stop'] = legs['origin']['name']
-                    legsdict['Distance'] = legs['distance']
+                    legsdict['Distance'] = legs.get('distance', '')
                     legsdict["DepartureTime"] = legs['departure']
                     legsdict['ArrivalTime'] = legs['arrival']
                     legsdict['Mode'] = "Walking"
@@ -247,37 +273,53 @@ def get_journeys():
                     legsdict['Destination'] = legs['destination']['name']
                     legsdict['ArrivalTime'] = legs['arrival']
                     legsdict["DepartureTime"] = legs['departure']
-                    legsdict['Direction'] = legs["direction"]
-                    legsdict["ArrivalPlatform"] = legs["arrivalPlatform"]
-                    legsdict["DeparturePlatform"] = legs["departurePlatform"]
+                    legsdict['Direction'] = legs.get('direction', '')
+                    #legsdict["ArrivalPlatform"] = legs.get('arrivalPlatform', '')
+                    #legsdict["DeparturePlatform"] = legs.get('departurePlatform', '')
                     legsdict['LineName'] = legs["line"]["name"]
                     legsdict['Mode'] = legs["line"]["mode"]
                 i = i + 1
                 CinemaJourneyList.append(legsdict)
-                cinema_journey[cinema_journey_count] = CinemaJourneyList
+                #cinema_journey[cinema_journey_count] = CinemaJourneyList
+                cinema_journey[cinema_journey_count]={}
+                cinema_journey[cinema_journey_count]["Journey"] = CinemaJourneyList
+                if i==leg_len+1:
+                    cinema_journey[cinema_journey_count]["TravelTime"] = diff
+
             cinema_journey_count = cinema_journey_count + 1
+
         restraurant_journey = {}
         restaurant_journey_count = 1
-
         for journey in toRestaurantResponse_json['journeys']:
             RestaurantJourneyList = []
             leg_len = len(journey['legs'])
             i = 1
             for legs in journey['legs']:
-                legsdict = {}
-                legsdict['Step'] = i
-                k = len(legs)
-                if k <= 7:  # This indicates the walking
-                    if i == leg_len:
-                        legsdict['Stop'] = legs['origin']['name']
-                        legsdict['Destination'] = legs['destination']['address']
-                    elif i == 1:
-                        legsdict['Stop'] = legs['origin']['address']
-                        legsdict['Destination'] = legs['destination']['name']
+                legsdict={}
+                #traveltime={}
+                legsdict['Step']=i
+                k=len(legs)
+                if k<=7: # This indicates the walking
+                    if i==leg_len:
+                        legsdict['Stop']=legs['origin']['name']
+                        legsdict['Destination']=legs['destination']['address']
+                        endingtime=legs["arrival"]
+                        endingtime=endingtime[:endingtime.index("+")]
+                        endingtime = datetime.strptime(endingtime, '%Y-%m-%dT%H:%M:%S')
+                        diff=endingtime-starttime
+                        diff=((diff).total_seconds())/60
+                        #traveltime["TravelTime"]=diff
+                        #RestaurantJourneyList.append(traveltime)
+                    elif i==1:
+                        legsdict['Stop']=legs['origin']['address']
+                        legsdict['Destination']=legs['destination']['name']
+                        starttime=legs['departure']
+                        starttime=starttime[:starttime.index("+")]
+                        starttime = datetime.strptime(starttime, '%Y-%m-%dT%H:%M:%S')
                     else:
                         legsdict['Destination'] = legs['destination']['name']
                         legsdict['Stop'] = legs['origin']['name']
-                    legsdict['Distance'] = legs['distance']
+                    legsdict['Distance'] = legs.get('distance', '')
                     legsdict["DepartureTime"] = legs['departure']
                     legsdict['ArrivalTime'] = legs['arrival']
                     legsdict['Mode'] = "Walking"
@@ -286,20 +328,25 @@ def get_journeys():
                     legsdict['Destination'] = legs['destination']['name']
                     legsdict['ArrivalTime'] = legs['arrival']
                     legsdict["DepartureTime"] = legs['departure']
-                    legsdict['Direction'] = legs["direction"]
-                    legsdict["ArrivalPlatform"] = legs["arrivalPlatform"]
-                    legsdict["DeparturePlatform"] = legs["departurePlatform"]
+                    legsdict['Direction'] = legs.get('direction', '')
+                    #legsdict["ArrivalPlatform"] = legs.get('arrivalPlatform', '')
+                    #legsdict["DeparturePlatform"] = legs.get('departurePlatform', '')
                     legsdict['LineName'] = legs["line"]["name"]
                     legsdict['Mode'] = legs["line"]["mode"]
                 i = i + 1
                 RestaurantJourneyList.append(legsdict)
-                restraurant_journey[restaurant_journey_count] = RestaurantJourneyList
+                restraurant_journey[restaurant_journey_count]={}
+                restraurant_journey[restaurant_journey_count]["Journey"] = RestaurantJourneyList
+                if i==leg_len+1:
+                    restraurant_journey[restaurant_journey_count]["TravelTime"] = diff
+
+
             restaurant_journey_count = restaurant_journey_count + 1
         TransportDataDict = {
             'ToCinema': cinema_journey,
             'ToRestaurant': restraurant_journey
         }
-        Trasnport_json = json.dumps(TransportDataDict)
+        Trasnport_json = jsonify(TransportDataDict)
         return Trasnport_json
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)

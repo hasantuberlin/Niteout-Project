@@ -43,6 +43,7 @@ def journeys():
     bus = params.get('bus')
     express = params.get('express')
     regional = params.get('regional')
+    results = params.get('results')
 
     if departure:
         tuple_time = time.strptime(departure[:19], "%Y-%m-%dT%H:%M:%S")
@@ -64,6 +65,8 @@ def journeys():
         url = url + "&express={}".format(express)
     if regional:
         url = url + "&regional={}".format(regional)
+    if results:
+        url = url + "&results={}".format(results)
 
     headers = {"Content-type": "application/json"}
     response = requests.get(url=url, headers=headers)
