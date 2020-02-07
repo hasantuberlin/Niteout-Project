@@ -11,6 +11,8 @@ import UIKit
 class ResultViewController: UIViewController {
     
     var viewModel : ResultViewModel!
+    @IBOutlet weak var bgImageView: UIImageView!
+
     @IBOutlet weak var tblView : UITableView!{
         didSet{
             tblView.delegate = self
@@ -27,6 +29,7 @@ class ResultViewController: UIViewController {
 }
 extension ResultViewController{
     func setupView(){
+        bgImageView.addBlur()
         self.tblView.estimatedRowHeight = 300
         self.tblView.rowHeight = UITableView.automaticDimension
         self.tblView.reloadData()

@@ -10,6 +10,8 @@ import UIKit
 class VotingViewController: UIViewController {
     
     var viewModel: VotingViewModel!
+    @IBOutlet weak var bgImageView: UIImageView!
+
     @IBOutlet weak var tblView : UITableView!{
         didSet{
             tblView.delegate = self
@@ -25,10 +27,12 @@ class VotingViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupPicker()
+//        btnNext.addBlur()
     }
 }
 extension VotingViewController {
     func setupView(){
+        bgImageView.addBlur()
         self.tblView.reloadData()
         self.btnNext.addTarget(self, action: #selector(self.didTapOnNext), for: .touchUpInside)
     }
@@ -45,22 +49,25 @@ extension VotingViewController {
     }
     func setupPicker(){
         picker = UIPickerView(frame: CGRect(x: 0, y: 200, width: view.frame.width, height:300))
-        picker!.backgroundColor = .white
+        picker!.backgroundColor = .clear
         picker!.showsSelectionIndicator = true
         picker!.delegate = self
         picker!.dataSource = self
         toolBar = UIToolbar(frame: CGRect(x:0,y:200-50,width: view.frame.width,height: 50))
         toolBar.barStyle = UIBarStyle.default
         toolBar.isTranslucent = true
-        toolBar.tintColor = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
+        toolBar.tintColor = .magenta//UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
         toolBar.sizeToFit()
         let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.donePicker))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItem.Style.plain, target: self, action: Selector("donePicker"))
         toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
-        picker?.backgroundColor = .red
+//        picker?.backgroundColor = .red
         self.dummyTextField.inputView = picker;
+        self.dummyTextField.inputView?.backgroundColor = .clear
+
+        self.dummyTextField.backgroundColor = .clear
         self.dummyTextField.inputAccessoryView = toolBar
         self.view.addSubview(dummyTextField)
 //        self.view.addSubview(picker!)

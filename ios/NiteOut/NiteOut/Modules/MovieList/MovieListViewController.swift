@@ -10,6 +10,8 @@ import UIKit
 
 class MovieListViewController: UIViewController{
     var viewModel : MovieViewModel!
+    @IBOutlet weak var bgImageView: UIImageView!
+
     @IBOutlet weak var tblView : UITableView!{
         didSet{
             tblView.delegate = self
@@ -26,6 +28,7 @@ class MovieListViewController: UIViewController{
 }
 extension MovieListViewController{
     func setupView(){
+        bgImageView.addBlur()
         self.tblView.estimatedRowHeight = 300
         self.tblView.rowHeight = UITableView.automaticDimension
         self.tblView.reloadData()

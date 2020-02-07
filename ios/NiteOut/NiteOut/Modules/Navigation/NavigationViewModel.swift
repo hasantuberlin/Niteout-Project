@@ -30,7 +30,7 @@ class NavigationViewModel
             result = getCinemaSteps()
         }
         else{
-            result = getCinemaSteps()
+            result = getRestaurantSteps()
             
         }
         let data = result[row]

@@ -13,6 +13,7 @@ class HomeViewController: UIViewController {
     
     
     
+    @IBOutlet weak var bgImageView: UIImageView!
     @IBOutlet weak var txtDatePicker: UITextField!
     @IBOutlet weak var btnNext : UIButton!
     let locationManager = CLLocationManager()
@@ -21,6 +22,10 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         self.setupView()
         setupLocationManager()
+        bgImageView.addBlur()
+//        txtDatePicker.addBlur()
+//        btnNext.addBlur()
+
     }
     
     
