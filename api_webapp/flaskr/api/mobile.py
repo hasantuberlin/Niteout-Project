@@ -46,7 +46,7 @@ def get_movies():
             json_item["movie_id"] = item.get("id")
             json_item["title"] = item.get("title")
             json_item["poster"] = item.get("poster_image_thumbnail", "")
-            json_item["genres"] = item.get("genres")
+            #json_item["genres"] = item.get("genres")
             # workaround on ratings
             ratings = item.get("ratings")
             if ratings:
