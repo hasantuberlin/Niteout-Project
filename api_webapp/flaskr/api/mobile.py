@@ -23,9 +23,11 @@ def get_movies():
     if request.is_json:
         json_input = request.get_json()
         genre_preferences = json_input["GenrePreferences"]
-        most_voted_genre = max(genre_preferences, key=lambda key: genre_preferences[key])
+        most_voted_genre = max(
+            genre_preferences, key=lambda key: genre_preferences[key])
         list_of_genres = _fetch_genres()
-        genre_obj = next((item for item in list_of_genres['genres'] if item['name'] == most_voted_genre), None)
+        genre_obj = next(
+            (item for item in list_of_genres['genres'] if item['name'] == most_voted_genre), None)
         genre_id = genre_obj["id"]
 
         lat = json_input["UserLat"]
@@ -50,7 +52,8 @@ def get_movies():
             # workaround on ratings
             ratings = item.get("ratings")
             if ratings:
-                json_item["ratings"] = ratings[next(iter(ratings))].get("value")
+                json_item["ratings"] = ratings[next(
+                    iter(ratings))].get("value")
             else:
                 json_item["ratings"] = ""
             json_item["runtime"] = item.get("runtime")
@@ -60,7 +63,8 @@ def get_movies():
         formatted_json = jsonify(formatted_results)
         return formatted_json
     else:
-        error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
+        error = "An error has occurred: Invalid JSON input. Error code: {}".format(
+            500)
         return error
 
 
@@ -108,7 +112,8 @@ def get_showtimes():
         formatted_json = jsonify(formatted_results)
         return formatted_json
     else:
-        error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
+        error = "An error has occurred: Invalid JSON input. Error code: {}".format(
+            500)
         return error
 
 
@@ -118,7 +123,8 @@ def get_restaurants():
         json_input = request.get_json()
 
         cuisine_preferences = json_input["CuisinePreferences"]
-        most_voted_cuisine = max(cuisine_preferences, key=lambda key: cuisine_preferences[key])
+        most_voted_cuisine = max(
+            cuisine_preferences, key=lambda key: cuisine_preferences[key])
         print(most_voted_cuisine)
 
         lat = json_input["CinemaLocation"].get("lat", "")
@@ -143,7 +149,8 @@ def get_restaurants():
                          "rating": item.get("rating"),
                          "price_level": item.get("price_level")}
             if(item.get("opening_hours") != None):
-                json_item["open_now"] = item.get("opening_hours").get("open_now")
+                json_item["open_now"] = item.get(
+                    "opening_hours").get("open_now")
             else:
                 json_item["open_now"] = ""
             restaurants.append(json_item)
@@ -152,7 +159,8 @@ def get_restaurants():
         formatted_json = jsonify(formatted_results)
         return formatted_json
     else:
-        error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
+        error = "An error has occurred: Invalid JSON input. Error code: {}".format(
+            500)
         return error
 
 
@@ -194,154 +202,25 @@ def get_journeys():
 
         restaurant_lat = json_input["RestaurantLocation"].get("lat", "")
         restaurant_lon = json_input["RestaurantLocation"].get("lon", "")
-        restaurant_address = json_input["RestaurantLocation"].get("address", "")
+        restaurant_address = json_input["RestaurantLocation"].get(
+            "address", "")
 
         time_from = json_input["Date"]
-        # Error handling caused by unresponsive BVG API
-        max_retries = 10
-        num_retries = 0
-        while num_retries < max_retries:
-            cinema_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}&departure={}&results=1'.format(user_lat, user_lon, user_address,
-                                                                                                                                                               cinema_lat, cinema_lon, cinema_address, time_from)
-            toCinemaResponse = requests.get(cinema_journey_request)
-            if toCinemaResponse.content != b'An error has occured: Refresh again. Error code: 502':
-                break
-            num_retries += 1
-            time.sleep(1)
-        if num_retries == max_retries:
-            error = "An error has occurred on fetching cinema journey response: Refresh again. Error code: {}".format(toCinemaResponse.status_code)
-            return error
-
-        num_retries = 0
+        toCinemaResponse = call_transportaion_api(
+            "cinema", user_lat, user_lon, user_address, cinema_lat, cinema_lon, cinema_address, time_from)
 
         # Add buffer to the second connection departure
         time_from_dt = datetime.strptime(time_from[:19], "%Y-%m-%dT%H:%M:%S")
         time_from2 = time_from_dt + timedelta(hours=2, minutes=30)
         time_from2 = time_from2.strftime('%Y-%m-%dT%H:%M:%S')
 
-        while num_retries < max_retries:
-            restaurant_journey_request = 'http://127.0.0.1:5000/api/transport/journeys?from.location={},{}&from.address={}&to.location={},{}&to.address={}&departure={}&results=1'.format(cinema_lat, cinema_lon, cinema_address,
-                                                                                                                                                                        restaurant_lat, restaurant_lon, restaurant_address, time_from2)
-            toRestaurantResponse = requests.get(restaurant_journey_request)
-            if toRestaurantResponse.content != b'An error has occured: Refresh again. Error code: 502':
-                break
-            num_retries += 1
-            time.sleep(1)
-        if num_retries == max_retries:
-            error = "An error has occurred on fetching restaurant journey response: Refresh again. Error code: {}".format(toRestaurantResponse.status_code)
-            return error
+        toRestaurantResponse = call_transportaion_api(
+            "resturant", cinema_lat, cinema_lon, cinema_address, restaurant_lat, restaurant_lon, restaurant_address, time_from2)
 
-        toCinemaResponse_json = toCinemaResponse.json()
-        toRestaurantResponse_json = toRestaurantResponse.json()
-        cinema_journey_count=1
-        cinema_journey={}
-        for journey in toCinemaResponse_json['journeys']:
-            CinemaJourneyList= []
-            leg_len=len(journey['legs'])
-            i=1
-            for legs in journey['legs']:
-                legsdict={}
-                #traveltime={}
-                legsdict['Step']=i
-                k=len(legs)
-                if k<=7:
-                    if i==leg_len:
-                        legsdict['Stop']=legs['origin']['name']
-                        legsdict['Destination']=legs['destination']['address']
-                        endingtime=legs['arrival']
-                        endingtime=endingtime[:endingtime.index("+")]
-                        endingtime = datetime.strptime(endingtime, '%Y-%m-%dT%H:%M:%S')
-                        diff=endingtime-starttime
-                        diff=((diff).total_seconds())/60
-                        #traveltime["TravelTime"]=diff
-                        #CinemaJourneyList.append(traveltime)
-                    elif i==1:
-                        legsdict['Stop']=legs['origin']['address']
-                        legsdict['Destination']=legs['destination']['name']
-                        starttime=legs['departure']
-                        starttime=starttime[:starttime.index("+")]
-                        starttime = datetime.strptime(starttime, '%Y-%m-%dT%H:%M:%S')
-                    else:
-                        legsdict['Destination'] = legs['destination']['name']
-                        legsdict['Stop'] = legs['origin']['name']
-                    legsdict['Distance'] = legs.get('distance', '')
-                    legsdict["DepartureTime"] = legs['departure']
-                    legsdict['ArrivalTime'] = legs['arrival']
-                    legsdict['Mode'] = "Walking"
-                if k > 7:
-                    legsdict['Stop'] = legs['origin']['name']
-                    legsdict['Destination'] = legs['destination']['name']
-                    legsdict['ArrivalTime'] = legs['arrival']
-                    legsdict["DepartureTime"] = legs['departure']
-                    legsdict['Direction'] = legs.get('direction', '')
-                    #legsdict["ArrivalPlatform"] = legs.get('arrivalPlatform', '')
-                    #legsdict["DeparturePlatform"] = legs.get('departurePlatform', '')
-                    legsdict['LineName'] = legs["line"]["name"]
-                    legsdict['Mode'] = legs["line"]["mode"]
-                i = i + 1
-                CinemaJourneyList.append(legsdict)
-                #cinema_journey[cinema_journey_count] = CinemaJourneyList
-                cinema_journey[cinema_journey_count]={}
-                cinema_journey[cinema_journey_count]["Journey"] = CinemaJourneyList
-                if i==leg_len+1:
-                    cinema_journey[cinema_journey_count]["TravelTime"] = diff
-
-            cinema_journey_count = cinema_journey_count + 1
-
-        restraurant_journey = {}
-        restaurant_journey_count = 1
-        for journey in toRestaurantResponse_json['journeys']:
-            RestaurantJourneyList = []
-            leg_len = len(journey['legs'])
-            i = 1
-            for legs in journey['legs']:
-                legsdict={}
-                #traveltime={}
-                legsdict['Step']=i
-                k=len(legs)
-                if k<=7: # This indicates the walking
-                    if i==leg_len:
-                        legsdict['Stop']=legs['origin']['name']
-                        legsdict['Destination']=legs['destination']['address']
-                        endingtime=legs["arrival"]
-                        endingtime=endingtime[:endingtime.index("+")]
-                        endingtime = datetime.strptime(endingtime, '%Y-%m-%dT%H:%M:%S')
-                        diff=endingtime-starttime
-                        diff=((diff).total_seconds())/60
-                        #traveltime["TravelTime"]=diff
-                        #RestaurantJourneyList.append(traveltime)
-                    elif i==1:
-                        legsdict['Stop']=legs['origin']['address']
-                        legsdict['Destination']=legs['destination']['name']
-                        starttime=legs['departure']
-                        starttime=starttime[:starttime.index("+")]
-                        starttime = datetime.strptime(starttime, '%Y-%m-%dT%H:%M:%S')
-                    else:
-                        legsdict['Destination'] = legs['destination']['name']
-                        legsdict['Stop'] = legs['origin']['name']
-                    legsdict['Distance'] = legs.get('distance', '')
-                    legsdict["DepartureTime"] = legs['departure']
-                    legsdict['ArrivalTime'] = legs['arrival']
-                    legsdict['Mode'] = "Walking"
-                if k > 7:  # This indicates the (bus train) journey
-                    legsdict['Stop'] = legs['origin']['name']
-                    legsdict['Destination'] = legs['destination']['name']
-                    legsdict['ArrivalTime'] = legs['arrival']
-                    legsdict["DepartureTime"] = legs['departure']
-                    legsdict['Direction'] = legs.get('direction', '')
-                    #legsdict["ArrivalPlatform"] = legs.get('arrivalPlatform', '')
-                    #legsdict["DeparturePlatform"] = legs.get('departurePlatform', '')
-                    legsdict['LineName'] = legs["line"]["name"]
-                    legsdict['Mode'] = legs["line"]["mode"]
-                i = i + 1
-                RestaurantJourneyList.append(legsdict)
-                restraurant_journey[restaurant_journey_count]={}
-                restraurant_journey[restaurant_journey_count]["Journey"] = RestaurantJourneyList
-                if i==leg_len+1:
-                    restraurant_journey[restaurant_journey_count]["TravelTime"] = diff
-
-
-            restaurant_journey_count = restaurant_journey_count + 1
+        cinema_journey = parse_transportation_api_output(
+            toCinemaResponse.json())
+        restraurant_journey = parse_transportation_api_output(
+            toRestaurantResponse.json())
         TransportDataDict = {
             'ToCinema': cinema_journey,
             'ToRestaurant': restraurant_journey
@@ -349,10 +228,103 @@ def get_journeys():
         Trasnport_json = jsonify(TransportDataDict)
         return Trasnport_json
     else:
-        error = "An error has occurred: Invalid JSON input. Error code: {}".format(500)
+        error = "An error has occurred: Invalid JSON input. Error code: {}".format(
+            500)
         return error
 
 
+def call_transportaion_api(label, from_lat, from_lon, from_address, to_lat, to_lon, to_address, time_from):
+    # Error handling caused by unresponsive BVG API
+    max_retries = 10
+    num_retries = 0
+    base_url = "http://127.0.0.1:5000/api/transport/journeys"
+    response = {}
+    while num_retries < max_retries:
+        url = "{}?from.location={},{}&from.address={}&to.location={},{}&to.address={}&departure={}".format(
+            base_url, from_lat, from_lon, from_address, to_lat, to_lon, to_address, time_from)
+        response = requests.get(url)
+        if response.content != b'An error has occured: Refresh again. Error code: 502':
+            return response
+        num_retries += 1
+        time.sleep(1)
+    if num_retries == max_retries:
+        error = "An error has occurred on fetching {} journey response: Refresh again. Error code: {}".format(
+            label, response.status_code)
+        return error
+    return response
+
+
+def parse_transportation_api_output(input_json):
+    journeys = get_journeys_from_json(input_json)
+    journeys.sort(key= lambda k: int(k["TravelTime"]))
+    output = {}
+    # i = 1
+    # for journey in journeys:
+    #     output[i] = journey
+    #     i += 1
+    first = journeys[0]
+    output[1] = first
+    return output
+
+
+def get_journeys_from_json(input_json):
+    journeys = []
+    for journey in input_json['journeys']:
+        journeyList = []
+        leg_len = len(journey['legs'])
+        i = 1
+        for legs in journey['legs']:
+            legsdict = {}
+            # traveltime={}
+            legsdict['Step'] = i
+            k = len(legs)
+            if k <= 7:  # This indicates the walking
+                if i == leg_len:
+                    legsdict['Stop'] = legs['origin']['name']
+                    legsdict['Destination'] = legs['destination']['address']
+                    endingtime = legs['arrival']
+                    endingtime = endingtime[:endingtime.index("+")]
+                    endingtime = datetime.strptime(
+                        endingtime, '%Y-%m-%dT%H:%M:%S')
+                    diff = endingtime-starttime
+                    diff = ((diff).total_seconds())/60
+                    # traveltime["TravelTime"]=diff
+                    # journeyList.append(traveltime)
+                elif i == 1:
+                    legsdict['Stop'] = legs['origin']['address']
+                    legsdict['Destination'] = legs['destination']['name']
+                    starttime = legs['departure']
+                    starttime = starttime[:starttime.index("+")]
+                    starttime = datetime.strptime(
+                        starttime, '%Y-%m-%dT%H:%M:%S')
+                else:
+                    legsdict['Destination'] = legs['destination']['name']
+                    legsdict['Stop'] = legs['origin']['name']
+                legsdict['Distance'] = legs.get('distance', '')
+                legsdict["DepartureTime"] = legs['departure']
+                legsdict['ArrivalTime'] = legs['arrival']
+                legsdict['Mode'] = "Walking"
+            if k > 7:  # This indicates the (bus train) journey
+                legsdict['Stop'] = legs['origin']['name']
+                legsdict['Destination'] = legs['destination']['name']
+                legsdict['ArrivalTime'] = legs['arrival']
+                legsdict["DepartureTime"] = legs['departure']
+                legsdict['Direction'] = legs.get('direction', '')
+                #legsdict["ArrivalPlatform"] = legs.get('arrivalPlatform', '')
+                #legsdict["DeparturePlatform"] = legs.get('departurePlatform', '')
+                legsdict['LineName'] = legs["line"]["name"]
+                legsdict['Mode'] = legs["line"]["mode"]
+            i += 1
+            journeyList.append(legsdict)
+        journey = {
+            "Journey": journeyList,
+            "TravelTime": diff
+        }
+        journeys.append(journey)
+    return journeys
+
+
 def _fetch_genres():
-    resp_list_of_genres = requests.get('http://localhost:5000/api/cinemas/list_of_genres')
+    resp_list_of_genres = requests.get(
+        'http://localhost:5000/api/cinemas/list_of_genres')
     return resp_list_of_genres.json()
