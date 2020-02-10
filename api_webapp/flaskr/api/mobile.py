@@ -125,7 +125,6 @@ def get_restaurants():
         cuisine_preferences = json_input["CuisinePreferences"]
         most_voted_cuisine = max(
             cuisine_preferences, key=lambda key: cuisine_preferences[key])
-        print(most_voted_cuisine)
 
         lat = json_input["CinemaLocation"].get("lat", "")
         lon = json_input["CinemaLocation"].get("lon", "")
@@ -153,7 +152,8 @@ def get_restaurants():
                     "opening_hours").get("open_now")
             else:
                 json_item["open_now"] = ""
-            restaurants.append(json_item)
+            if(json_item["open_now"] == True):
+                restaurants.append(json_item)
 
         formatted_results["Restaurants"] = restaurants
         formatted_json = jsonify(formatted_results)
