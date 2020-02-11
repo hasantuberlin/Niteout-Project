@@ -1,7 +1,10 @@
 import requests
+import json
 from flask import Blueprint, request, jsonify
+import pandas as pd
 from datetime import datetime, timedelta
 import time
+from pandas.io.json import json_normalize
 
 bp_mobile_api = Blueprint('mobile', __name__, url_prefix='/api/mobile')
 
@@ -23,8 +26,13 @@ def get_movies():
     if request.is_json:
         json_input = request.get_json()
         genre_preferences = json_input["GenrePreferences"]
-        most_voted_genre = max(
-            genre_preferences, key=lambda key: genre_preferences[key])
+        action_num = json_normalize(genre_preferences)['Action'].values[0]
+        comedy_num = json_normalize(genre_preferences)['Comedy'].values[0]
+        romantic_num = json_normalize(genre_preferences)['Romantic'].values[0]
+        fiction_num = json_normalize(genre_preferences)['Fiction'].values[0]
+        horror_num = json_normalize(genre_preferences)['Horror'].values[0]
+
+        most_voted_genre = max(genre_preferences, key=lambda key: genre_preferences[key])
         list_of_genres = _fetch_genres()
         genre_obj = next(
             (item for item in list_of_genres['genres'] if item['name'] == most_voted_genre), None)
@@ -43,25 +51,46 @@ def get_movies():
         results = r_json["movies"]
         movies = []
         formatted_results = {"Movies": []}
+        formatted = {"Movies": []}
         for item in results:
-            json_item = {}
-            json_item["movie_id"] = item.get("id")
-            json_item["title"] = item.get("title")
-            json_item["poster"] = item.get("poster_image_thumbnail", "")
-            json_item["genres"] = item.get("genres")
-            # workaround on ratings
-            ratings = item.get("ratings")
-            if ratings:
-                json_item["ratings"] = ratings[next(
-                    iter(ratings))].get("value")
-            else:
-                json_item["ratings"] = ""
-            json_item["runtime"] = item.get("runtime")
-            movies.append(json_item)
+            if item['id'] and item['title'] and item['ratings']:
+                movie_genres_df = json_normalize(item['genres'])
+                movie_genres_score = 0
+                if movie_genres_df['name'].str.contains('Action').any():
+                    movie_genres_score += action_num
+                if movie_genres_df['name'].str.contains('Comedy').any():
+                    movie_genres_score += comedy_num
+                if movie_genres_df['name'].str.contains('Romantic').any():
+                    movie_genres_score += romantic_num
+                if movie_genres_df['name'].str.contains('Science Fiction').any():
+                    movie_genres_score += fiction_num
+                if movie_genres_df['name'].str.contains('Horror').any():
+                    movie_genres_score += horror_num
+
+                json_item = {"movie_id": item.get("id"), "title": item.get("title"),
+                             "poster": item.get("poster_image_thumbnail")}
+                # workaround on ratings
+                ratings = item.get("ratings")
+                if ratings:
+                    json_item["ratings"] = ratings[next(iter(ratings))].get("value")
+                else:
+                    json_item["ratings"] = ""
+                json_item["runtime"] = item.get("runtime")
+                json_item["genre_votes_score"] = str(movie_genres_score)
+                json_item["genres"] = item.get("genres")
+                movies.append(json_item)
 
         formatted_results["Movies"] = movies
-        formatted_json = jsonify(formatted_results)
-        return formatted_json
+        formatted_json = json.dumps(formatted_results)
+        df = pd.read_json(json.dumps(movies))
+        df['rating_normalized'] = (df['ratings']-df['ratings'].min())/(df['ratings'].max()-df['ratings'].min())
+        df['vote_normalized'] = (df['genre_votes_score']-df['genre_votes_score'].min())/(df['genre_votes_score'].max()-df['genre_votes_score'].min())
+        df['final_score'] = (0.3*df['rating_normalized'] + 0.7*df['vote_normalized'])
+        df_selected = df.sort_values('final_score',ascending=False).head(5)[['genres','movie_id','poster','ratings','runtime','title']]
+        formatted["Movies"] = df_selected.to_dict('records')
+
+        #formatted_json = json.dumps(formatted)
+        return formatted
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(
             500)
