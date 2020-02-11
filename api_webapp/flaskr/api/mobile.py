@@ -1,6 +1,6 @@
 import requests
 import json
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 import pandas as pd
 from pandas.io.json import json_normalize
 
@@ -51,7 +51,7 @@ def get_movies():
         formatted_results = {"Movies": []}
         formatted = {"Movies": []}
         for item in results:
-            if(item['id'] and item['title'] and item['ratings']):
+            if item['id'] and item['title'] and item['ratings']:
                 movie_genres_df = json_normalize(item['genres'])
                 movie_genres_score = 0
                 if movie_genres_df['name'].str.contains('Action').any():
@@ -65,10 +65,8 @@ def get_movies():
                 if movie_genres_df['name'].str.contains('Horror').any():
                     movie_genres_score += horror_num
 
-                json_item = {}
-                json_item["movie_id"] = item.get("id")
-                json_item["title"] = item.get("title")
-                json_item["poster"] = item.get("poster_image_thumbnail")
+                json_item = {"movie_id": item.get("id"), "title": item.get("title"),
+                             "poster": item.get("poster_image_thumbnail")}
                 # workaround on ratings
                 ratings = item.get("ratings")
                 if ratings:
