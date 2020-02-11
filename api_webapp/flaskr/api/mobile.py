@@ -36,7 +36,7 @@ def get_movies():
 
         list_of_genres = _fetch_genres()
         genre_obj = next(
-            (item for item in list_of_genres['genres'] if item['name'] == most_voted_genre, None)
+            (item for item in list_of_genres['genres'] if item['name'] == most_voted_genre), None)
         genre_id = genre_obj["id"]
         lat = json_input["UserLat"]
         lon = json_input["UserLon"]
