@@ -170,7 +170,7 @@ def get_restaurants():
         results = r_json["results"]
         restaurants = []
         formatted_results = {"Restaurants": []}
-        formatted = {"Movies": []}
+        formatted = {"Restaurants": []}
         for item in results:
             json_item = {"lat": item.get("geometry").get("location").get("lat"),
                          "lon": item.get("geometry").get("location").get("lng"),
