@@ -196,7 +196,7 @@ def get_restaurants():
         df['price_normalized'] = 1 - df['price_normalized']
         df['final_score'] = (0.5*df['rating_normalized'] + 0.5*df['price_normalized'])
         df_selected = df.sort_values('final_score',ascending=False).head(5)[['address','id','lat','lon','name','open_now','price_level','rating']]
-        df_selected['price_level'] = df['price_level'].fillna(0)
+        df_selected['price_level'] = df['price_level'].fillna(1.)
         formatted_json = jsonify(formatted_results)
         formatted["Restaurants"] = df_selected.to_dict('records')
 
