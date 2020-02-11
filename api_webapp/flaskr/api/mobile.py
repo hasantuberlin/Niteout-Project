@@ -3,6 +3,7 @@ import json
 from flask import Blueprint, request
 import pandas as pd
 from pandas.io.json import json_normalize
+from flask import jsonify
 
 bp_mobile_api = Blueprint('mobile', __name__, url_prefix='/api/mobile')
 
@@ -23,6 +24,7 @@ def get_movies():
     # }
     if request.is_json:
         json_input = request.get_json()
+
         genre_preferences = json_input["GenrePreferences"]
         action_num = json_normalize(genre_preferences)['Action'].values[0]
         comedy_num = json_normalize(genre_preferences)['Comedy'].values[0]
@@ -31,11 +33,12 @@ def get_movies():
         horror_num = json_normalize(genre_preferences)['Horror'].values[0]
 
         most_voted_genre = max(genre_preferences, key=lambda key: genre_preferences[key])
+
         list_of_genres = _fetch_genres()
         genre_obj = next(
-            (item for item in list_of_genres['genres'] if item['name'] == most_voted_genre), None)
+            (item for item in list_of_genres['genres'] if item['name'] == 'Horror' or item['name'] == 'Comedy' or item['name'] == 'Romantic' or
+            item['name'] == 'Fiction' or item['name'] == 'Action'), None)
         genre_id = genre_obj["id"]
-
         lat = json_input["UserLat"]
         lon = json_input["UserLon"]
 
@@ -168,6 +171,7 @@ def get_restaurants():
         results = r_json["results"]
         restaurants = []
         formatted_results = {"Restaurants": []}
+        formatted = {"Movies": []}
         for item in results:
             json_item = {"lat": item.get("geometry").get("location").get("lat"),
                          "lon": item.get("geometry").get("location").get("lng"),
@@ -185,8 +189,19 @@ def get_restaurants():
                 restaurants.append(json_item)
 
         formatted_results["Restaurants"] = restaurants
+        df = pd.read_json(json.dumps(restaurants))
+        df['rating'] = df['rating'].fillna(0)
+        df['price_level_filled'] = df['price_level'].fillna(1)
+        df['rating_normalized'] = (df['rating']-df['rating'].min())/(df['rating'].max()-df['rating'].min())
+        df['price_normalized'] = (df['price_level_filled']-df['price_level_filled'].min())/(df['price_level_filled'].max()-df['price_level_filled'].min())
+        df['price_normalized'] = 1 - df['price_normalized']
+        df['final_score'] = (0.5*df['rating_normalized'] + 0.5*df['price_normalized'])
+        df_selected = df.sort_values('final_score',ascending=False).head(5)[['address','id','lat','lon','name','open_now','price_level','rating']]
         formatted_json = jsonify(formatted_results)
-        return formatted_json
+        formatted["Restaurants"] = df_selected.to_dict('records')
+
+        #formatted_json = json.dumps(formatted)
+        return formatted
     else:
         error = "An error has occurred: Invalid JSON input. Error code: {}".format(
             500)
