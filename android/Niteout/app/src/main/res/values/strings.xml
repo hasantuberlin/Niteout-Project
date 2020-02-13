@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Niteout</string>
+
+    <array name="listofmovies">
+        <item>Action</item>
+        <item>Comedy</item>
+        <item>Horror</item>
+        <item>Romantic</item>
+        <item>Fiction</item>
+    </array>
+
+    <array name="listofcusine">
+        <item>Asian</item>
+        <item>German</item>
+        <item>Turkish</item>
+        <item>Indian</item>
+        <item>Mexican</item>
+    </array>
+</resources>
