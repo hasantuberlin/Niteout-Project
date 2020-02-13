@@ -189,14 +189,12 @@ def get_restaurants():
 
         formatted_results["Restaurants"] = restaurants
         df = pd.read_json(json.dumps(restaurants))
-        df['rating'] = df['rating'].fillna(0)
-        df['price_level_filled'] = df['price_level'].fillna(1)
+        df['price_level'] = df['price_level'].fillna(df['price_level'].median()).round(0)
         df['rating_normalized'] = (df['rating']-df['rating'].min())/(df['rating'].max()-df['rating'].min())
-        df['price_normalized'] = (df['price_level_filled']-df['price_level_filled'].min())/(df['price_level_filled'].max()-df['price_level_filled'].min())
+        df['price_normalized'] = (df['price_level']-df['price_level'].min())/(df['price_level'].max()-df['price_level'].min())
         df['price_normalized'] = 1 - df['price_normalized']
         df['final_score'] = (0.5*df['rating_normalized'] + 0.5*df['price_normalized'])
         df_selected = df.sort_values('final_score',ascending=False).head(5)[['address','id','lat','lon','name','open_now','price_level','rating']]
-        df_selected['price_level'] = df['price_level'].fillna(1.)
         formatted_json = jsonify(formatted_results)
         formatted["Restaurants"] = df_selected.to_dict('records')
 
