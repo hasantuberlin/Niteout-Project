@@ -43,8 +43,8 @@ class MovieRepo: MovieRepository{
             "Fiction": 9,
             "Horror": 4
           ],
-          "UserLat": 52.51379,
-          "UserLon": 13.40342
+          "UserLat": userLat,
+          "UserLon": userLong
         ] as [String : Any]
         
         

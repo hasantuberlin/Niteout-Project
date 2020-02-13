@@ -79,7 +79,8 @@ extension HomeViewController{
             let date = self.txtDatePicker.text ?? ""
             let sb = UIStoryboard.init(name: "Main", bundle: nil)
             let vc = sb.instantiateViewController(identifier: "VotingViewController") as! VotingViewController
-            vc.viewModel = VotingViewModel(date, userLong: 13.40342, userLat: 52.51379)
+            vc.viewModel = VotingViewModel(date, userLong: 13.3246609, userLat: 52.5152074)
+//            52.5152074 
             self.navigationController?.pushViewController(vc, animated: true)
         }
             

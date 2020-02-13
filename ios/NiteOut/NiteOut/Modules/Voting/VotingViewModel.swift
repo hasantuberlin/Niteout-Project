@@ -111,7 +111,7 @@ class VotingViewModel {
             return dict
         }
         print(genre)
-        repo.getMovies(date: "2020-01-31T17:15:00+01:00", genreDict: genre, userLat: 52.51379, userLong: 13.40342) { (success, serverMsg, data) in
+        repo.getMovies(date: date, genreDict: genre, userLat: userLat, userLong: userLong) { (success, serverMsg, data) in
             completionHandler(success, serverMsg,data)
         }
     }

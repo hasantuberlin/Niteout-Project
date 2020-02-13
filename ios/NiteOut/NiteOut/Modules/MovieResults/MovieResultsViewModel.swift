@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import CoreLocation
 class MovieResultsViewModel
 {
     var date : String!
@@ -17,6 +17,7 @@ class MovieResultsViewModel
     let cuisinePreference : [String : Int]!
     var arrShowTimes : [ShowTimeShowtime]!
     var arrCinemas : [ShowTimeCinema]!
+    var strAddress = ""
     init(_ arrShowTime : [ShowTimeShowtime], _ arrCinemas : [ShowTimeCinema], date: String, userLong: Double , userLat : Double, cuisinePreference: [String : Int]){
         self.arrShowTimes = arrShowTime
         self.arrCinemas = arrCinemas
@@ -24,6 +25,9 @@ class MovieResultsViewModel
         self.userLat = userLat
         self.userLong = userLong
         self.cuisinePreference = cuisinePreference
+        convertLatLongToAddress { (address) in
+            self.strAddress = address
+        }
     }
     
     func getShowTimeCount()->Int{
@@ -55,24 +59,56 @@ class MovieResultsViewModel
     func getCinemaData(row: Int)->[String:Any]{
         let result = cellViewModelForRow(row: row)
         return [
-        "lat": result.cinemaLat,
-        "lon": result.cinemaLong,
-        "address": result.cinemaAddress
-        ] as [String : Any]
+            "lat": result.cinemaLat,
+            "lon": result.cinemaLong,
+            "address": result.cinemaAddress
+            ] as [String : Any]
+    }
+    func convertLatLongToAddress(completionHandler: @escaping( _ address : String)->Void){
+        var addressString : String = ""
+
+        var location = CLLocation(latitude: userLat, longitude: userLong) //changed!!!
+        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
+            if error != nil {
+                return
+            }
+            if placemarks!.count > 0 {
+                let pm = placemarks![0] as! CLPlacemark
+                if pm.subLocality != nil {
+                    addressString = addressString + pm.subLocality! + ", "
+                }
+                if pm.thoroughfare != nil {
+                    addressString = addressString + pm.thoroughfare! + ", "
+                }
+                if pm.locality != nil {
+                    addressString = addressString + pm.locality! + ", "
+                }
+                if pm.country != nil {
+                    addressString = addressString + pm.country! + ", "
+                }
+                if pm.postalCode != nil {
+                    addressString = addressString + pm.postalCode! + " "
+                }
+                completionHandler(addressString)
+            }
+            else {
+                completionHandler(addressString)
+            }
+        })
     }
     func getUserLocationData()->[String:Any]{
         return [
-        "lat": userLat ?? 0.0,
-        "lon": userLong ?? 0.0,
-        "address": "Brüderstraße"
-        ] as [String : Any]
-
+            "lat": userLat ?? 0.0,
+            "lon": userLong ?? 0.0,
+            "address": strAddress
+            ] as [String : Any]
+        
     }
     
     func getRestaurantsResults(row: Int,completionHandler:@escaping (_ success : Bool , _ serverMsg : String ,_ restaurantData : RestaurantDetailRootClass?)->Void){
         let cinemaDict = self.getCinemaData(row: row)
         let userLocation = self.getUserLocationData()
-
+        
         repo.getRestaurantResults(date: date, cinemaData: cinemaDict, userData: userLocation, cuisineData: cuisinePreference) { (success, serverMsg, data) in
             completionHandler(success, serverMsg, data)
             

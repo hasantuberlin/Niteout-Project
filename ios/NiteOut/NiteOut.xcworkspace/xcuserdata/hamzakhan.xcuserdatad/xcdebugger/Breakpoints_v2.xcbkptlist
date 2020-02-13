@@ -24,7 +24,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "9C6F4FB1-CA90-4191-A6D9-88EA606C426A"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NiteOut/Repository/BaseRepository.swift"
@@ -88,7 +88,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "85A191F5-2AD4-43D9-8190-0A4B4FB6B070"
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NiteOut/Models/Movie/MovieRepoMovie.swift"
@@ -199,22 +199,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "5DCC2F06-3262-4430-B805-3BF71456687B"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NiteOut/Modules/MovieResults/MovieResultsViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
-            landmarkName = "tableView(_:cellForRowAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "D8230394-2E00-433F-88E6-47F40F74302F"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -279,54 +263,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E0D2DDC1-AE48-45E8-BA03-6822C54701BE"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NiteOut/Modules/MovieList/MovieViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "getShowtimeResults(row:completionHandler:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "E0D2DDC1-AE48-45E8-BA03-6822C54701BE - 400a4613131feee3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "NiteOut.MovieViewModel.getShowtimeResults(row: Swift.Int, completionHandler: (Swift.Bool, Swift.String, Swift.Optional&lt;NiteOut.ShowTimeRootClass&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "NiteOut"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hamzakhan/Documents/Germany/TU%20Berlin/Subjects/AIM1/NiteOut/NiteOut/Modules/MovieList/MovieViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "42"
-                  endingLineNumber = "42"
-                  offsetFromSymbolStart = "177">
-               </Location>
-               <Location
-                  uuid = "E0D2DDC1-AE48-45E8-BA03-6822C54701BE - 405565e4156d5447"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Bool, Swift.String, Swift.Optional&lt;NiteOut.ShowTimeRootClass&gt;) -&gt; () in NiteOut.MovieViewModel.getShowtimeResults(row: Swift.Int, completionHandler: (Swift.Bool, Swift.String, Swift.Optional&lt;NiteOut.ShowTimeRootClass&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "NiteOut"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hamzakhan/Documents/Germany/TU%20Berlin/Subjects/AIM1/NiteOut/NiteOut/Modules/MovieList/MovieViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "43"
-                  endingLineNumber = "43"
-                  offsetFromSymbolStart = "67">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "A898C19B-ADEE-4299-8208-03A77565B760"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -343,22 +279,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CC3ED3A6-2A17-44F5-923B-4F2352FB6AAA"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NiteOut/Repository/JourneyRepo.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
-            landmarkName = "getJourneyResults(date:cinemaData:userData:restaurantData:completionHandler:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "A6A1C861-68A9-4AFE-8FAF-F5BC9E30D169"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -368,22 +288,6 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "70"
             endingLineNumber = "70"
-            landmarkName = "getJourneyResults(date:cinemaData:userData:restaurantData:completionHandler:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "35CC08FA-3D7F-4705-A357-8D7AC2226438"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NiteOut/Repository/JourneyRepo.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
             landmarkName = "getJourneyResults(date:cinemaData:userData:restaurantData:completionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -488,7 +392,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "F3E8FC6E-7EA6-448E-99CC-F88742908E6D"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NiteOut/Modules/MovieList/MovieListViewController.swift"
@@ -503,24 +407,8 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8C2DC524-411D-4524-AA9B-6EB62FD003C5"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NiteOut/Repository/ShowTimeRepo.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "getShowTimeResults(date:movieId:userLat:userLong:completionHandler:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "6B6C1DC0-9DA3-4446-A9E1-C24105479437"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NiteOut/Models/ShowTime/ShowTimeRootClass.swift"
@@ -536,7 +424,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "5396A227-3B0A-4584-BB93-F92AAF8A32E7"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NiteOut/Models/ShowTime/ShowTimeShowtime.swift"
@@ -558,9 +446,169 @@
             filePath = "NiteOut/Repository/RestaurantRepo.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
             landmarkName = "getRestaurantResults(date:cinemaData:userData:cuisineData:completionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BDEBE348-E663-4F82-AE4A-7529CB63A80B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NiteOut/Models/ShowTime/ShowTimeShowtime.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "init(from:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "BDEBE348-E663-4F82-AE4A-7529CB63A80B - 42bce5f8f2630f3c"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "NiteOut.ShowTimeShowtime.__allocating_init(from: Swift.Decoder) throws -&gt; NiteOut.ShowTimeShowtime"
+                  moduleName = "NiteOut"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hamzakhan/Documents/Germany/TU%20Berlin/Subjects/AIM1/NiteOut/NiteOut/Models/ShowTime/ShowTimeShowtime.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "18">
+               </Location>
+               <Location
+                  uuid = "BDEBE348-E663-4F82-AE4A-7529CB63A80B - fa278a7e9212992d"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "NiteOut.ShowTimeShowtime.init(from: Swift.Decoder) throws -&gt; NiteOut.ShowTimeShowtime"
+                  moduleName = "NiteOut"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hamzakhan/Documents/Germany/TU%20Berlin/Subjects/AIM1/NiteOut/NiteOut/Models/ShowTime/ShowTimeShowtime.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "194">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "33401BC2-27D9-4E1D-B39C-6018821AD039"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NiteOut/Models/ShowTime/ShowTimeShowtime.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "CodingKeys"
+            landmarkType = "13">
+            <Locations>
+               <Location
+                  uuid = "33401BC2-27D9-4E1D-B39C-6018821AD039 - 42bce5f8f2630f3c"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "NiteOut.ShowTimeShowtime.__allocating_init(from: Swift.Decoder) throws -&gt; NiteOut.ShowTimeShowtime"
+                  moduleName = "NiteOut"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hamzakhan/Documents/Germany/TU%20Berlin/Subjects/AIM1/NiteOut/NiteOut/Models/ShowTime/ShowTimeShowtime.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "18">
+               </Location>
+               <Location
+                  uuid = "33401BC2-27D9-4E1D-B39C-6018821AD039 - fa278a7e9212992d"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "NiteOut.ShowTimeShowtime.init(from: Swift.Decoder) throws -&gt; NiteOut.ShowTimeShowtime"
+                  moduleName = "NiteOut"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hamzakhan/Documents/Germany/TU%20Berlin/Subjects/AIM1/NiteOut/NiteOut/Models/ShowTime/ShowTimeShowtime.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "194">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BEC376EC-1B94-40C3-95AE-47FE339FB9F6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NiteOut/Repository/BaseRepository.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
+            landmarkName = "requestService(url:method:params:header:showSpinner:completionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C69C5601-636F-4C6A-BC7A-36E23FBC5A40"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NiteOut/Repository/BaseRepository.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "requestService(url:method:params:header:showSpinner:completionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B4962212-E395-4A5F-BC71-1253A0A581CD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NiteOut/Modules/MovieResults/MovieResultsViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "convertLatLongToAddress(completionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A1C6B7FA-5665-4352-983D-6D6411759120"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NiteOut/Modules/MovieResults/MovieResultsViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "getUserLocationData()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
